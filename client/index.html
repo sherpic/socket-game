@@ -1,11 +1,10 @@
-<canvas id="ctx" width="500" height="500" style="border:1px solid #000"></canvas>
+<canvas id="ctx" width="1000" height="650" style="border:1px solid #000"></canvas>
 
-<div id="chat-text" style="width:500px; height:100px; overflow-y:scroll">
-	<div>Hello</div>
+<div id="chat-text" style="width:1000px; height:100px; overflow-y:scroll">
 </div>
 
 <form id="chat-form">
-	<input id="chat-input" type="text" style="width:500px"></input>
+	<input id="chat-input" type="text" style="width:1000px"></input>
 </form>
 
 <script src="client/js/socket.js"></script>
@@ -19,7 +18,7 @@
 	var socket = io();
 
 	socket.on('newPositions', function(data){
-		ctx.clearRect(0,0,500,500);
+		ctx.clearRect(0,0,1000,650);
 		for(var i = 0; i < data.player.length; i++)
 			ctx.fillText(data.player[i].number, data.player[i].x, data.player[i].y);
 		for(var i = 0; i < data.bullet.length; i++)
