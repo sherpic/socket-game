@@ -29,7 +29,20 @@
 				self.number = initPack.number;
 				self.x = initPack.x;
 				self.y = initPack.y;
+				self.hp = initPack.hp;
+				self.hpMax = initPack.hpMax;
+				self.score = initPack.score;
+
+				self.draw = function(){
+					var hpWidth = 30 * self.hp / self.hpMax;
+					ctx.fillRect(self.x - hpWidth/2, self.y - 40, hpWidth, 4);
+					ctx.fillText(self.number, self.x, self.y);
+
+					ctx.fillText(self.score, self.x, self.y-60);
+				}
+
 				Player.list[self.id] = self;
+
 				return self;
 			}
 			Player.list = {};
@@ -39,6 +52,11 @@
 				self.id = initPack.id;
 				self.x = initPack.x;
 				self.y = initPack.y;
+
+				self.draw = function(){
+					ctx.fillRect(self.x-5, self.y-5, 10, 10);
+				}
+
 				Bullet.list[self.id] = self;
 				return self;
 			}
@@ -63,6 +81,12 @@
 						}
 						if(pack.y !== undefined){
 							p.y = pack.y;
+						}
+						if(pack.hp !== undefined){
+							p.hp = pack.hp;
+						}
+						if(pack.score !== undefined){
+							p.score = pack.score;
 						}
 					}
 				}
@@ -92,10 +116,10 @@
 			setInterval(function(){
 				ctx.clearRect(0,0,1000,650);
 				for(var i in Player.list){
-					ctx.fillText(Player.list[i].number, Player.list[i].x, Player.list[i].y);
+					Player.list[i].draw();
 				}
 				for(var i in Bullet.list){
-					ctx.fillRect(Bullet.list[i].x-5, Bullet.list[i].y-5, 10, 10);
+					Bullet.list[i].draw();
 				}
 			}, 40);
 
