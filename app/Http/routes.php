@@ -12,13 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('layouts.master');
-});
-
-Route::get('/var', function(){
-	return "blah";
+    return view('pages.game');
 });
 
 Route::auth();
-
-Route::get('/home', 'HomeController@index');
