@@ -7,7 +7,7 @@
 	<input id="chat-input" type="text" style="width:1000px"></input>
 </form>
 
-<script src="client/js/socket.js"></script>
+<script src="//cdn.socket.io/socket.io-1.0.0.js"></script>
 <script>
 	var chatText = document.getElementById('chat-text');
 	var chatInput = document.getElementById('chat-input');
@@ -15,7 +15,7 @@
 	var ctx = document.getElementById("ctx").getContext("2d");
 	ctx.font = '30px Arial';
 
-	var socket = io();
+	var socket = io.connect('http://localhost:8001');
 
 	socket.on('newPositions', function(data){
 		ctx.clearRect(0,0,1000,650);

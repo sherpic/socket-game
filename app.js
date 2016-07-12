@@ -1,14 +1,13 @@
+var socket = require('socket.io');
 var express = require('express');
+var http = require('http');
+
 var app = express();
-var serv = require('http').Server(app);
+var serv = http.createServer(app);
 
-app.get('/', function(req, res){
-	res.sendFile(__dirname + '/client/index.html');
-});
+var io = socket.listen(serv);
 
-app.use('/client', express.static(__dirname + '/client'));
-
-serv.listen(2000);
+serv.listen(8001);
 console.log("Server started.");
 
 var SOCKET_LIST = {};
@@ -160,7 +159,6 @@ Bullet.update = function(){
 
 var DEBUG = true;
 
-var io = require('socket.io')(serv, {});
 io.sockets.on('connection', function(socket){
 	socket.id = Math.random();
 	SOCKET_LIST[socket.id] = socket;
@@ -195,3 +193,4 @@ setInterval(function(){
 		socket.emit('newPositions', pack);
 	}
 }, 1000/25)
+
