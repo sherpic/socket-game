@@ -19,6 +19,14 @@
 
 			var socket = io.connect('http://localhost:8001');
 
+			var Img = {};
+			Img.player = new Image();
+			Img.player.src = '/img/player.png';
+			Img.bullet = new Image();
+			Img.bullet.src = '/img/bullet.png';
+			Img.map = new Image();
+			Img.map.src = '/img/map.png';
+
 			var ctx = document.getElementById("ctx").getContext("2d");
 			ctx.font = '30px Arial';
 
@@ -34,10 +42,13 @@
 
 				self.draw = function(){
 					var hpWidth = 30 * self.hp / self.hpMax;
+					ctx.fillStyle = 'red';
 					ctx.fillRect(self.x - hpWidth/2, self.y - 40, hpWidth, 4);
-					ctx.fillText(self.number, self.x, self.y);
+					
+					var width = Img.player.width * 2;
+					var height = Img.player.width * 2;
 
-					ctx.fillText(self.score, self.x, self.y-60);
+					ctx.drawImage(Img.player, 0, 0, Img.player.width, Img.player.height, self.x-width/2, self.y-height/2, width, height);
 				}
 
 				Player.list[self.id] = self;
@@ -53,7 +64,10 @@
 				self.y = initPack.y;
 
 				self.draw = function(){
-					ctx.fillRect(self.x-5, self.y-5, 10, 10);
+					var width = Img.bullet.width/2;
+					var height = Img.bullet.width/2;
+
+					ctx.drawImage(Img.bullet, 0, 0, Img.bullet.width, Img.bullet.height, self.x-width/2, self.y-height/2, width, height);
 				}
 
 				Bullet.list[self.id] = self;
@@ -114,6 +128,7 @@
 
 			setInterval(function(){
 				ctx.clearRect(0,0,1000,650);
+				drawMap();
 				for(var i in Player.list){
 					Player.list[i].draw();
 				}
@@ -121,6 +136,10 @@
 					Bullet.list[i].draw();
 				}
 			}, 40);
+
+			var drawMap = function(){
+				ctx.drawImage(Img.map, 0, 0);
+			}
 
 			socket.on('addToChat', function(data){
 				chatText.innerHTML += '<div>' + data + '</div>';
