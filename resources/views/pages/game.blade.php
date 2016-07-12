@@ -75,7 +75,11 @@
 			}
 			Bullet.list = {};
 
+			var selfId = null;
+
 			socket.on('init', function(data){
+				if(data.selfId)
+					selfId = data.selfId;
 				for(var i = 0; i < data.player.length; i++){
 					new Player(data.player[i]);
 				}
@@ -129,6 +133,7 @@
 			setInterval(function(){
 				ctx.clearRect(0,0,1000,650);
 				drawMap();
+				drawScore();
 				for(var i in Player.list){
 					Player.list[i].draw();
 				}
@@ -139,6 +144,11 @@
 
 			var drawMap = function(){
 				ctx.drawImage(Img.map, 0, 0);
+			}
+
+			var drawScore = function(){
+				ctx.fillStyle = 'white';
+				ctx.fillText(Player.list[selfId].score, 0, 30);
 			}
 
 			socket.on('addToChat', function(data){
