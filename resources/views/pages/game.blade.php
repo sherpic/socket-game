@@ -2,7 +2,7 @@
 
 @section('content')
 	<div class="col-md-6 col-md-offset-3">
-		<canvas id="ctx" width="1000" height="650" style="border:1px solid #000"></canvas>
+		<canvas id="ctx" width="1000" height="650" style="border:1px solid #000; pointer-events:none"></canvas>
 
 		<div id="chat-text" style="width:1000px; height:100px; overflow-y:scroll">
 		</div>
@@ -19,7 +19,6 @@
 
 			var socket = io.connect('http://localhost:8001');
 
-			//game
 			var ctx = document.getElementById("ctx").getContext("2d");
 			ctx.font = '30px Arial';
 
