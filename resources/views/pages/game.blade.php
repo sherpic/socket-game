@@ -13,6 +13,9 @@
 
 		<script src="//cdn.socket.io/socket.io-1.0.0.js"></script>
 		<script>
+			var WIDTH = 1000;
+			var HEIGHT = 650;
+
 			var chatText = document.getElementById('chat-text');
 			var chatInput = document.getElementById('chat-input');
 			var chatForm = document.getElementById('chat-form');
@@ -41,14 +44,17 @@
 				self.score = initPack.score;
 
 				self.draw = function(){
+					var x = self.x - Player.list[selfId].x + WIDTH/2;
+					var y = self.y - Player.list[selfId].y + HEIGHT/2;
 					var hpWidth = 30 * self.hp / self.hpMax;
+
 					ctx.fillStyle = 'red';
-					ctx.fillRect(self.x - hpWidth/2, self.y - 40, hpWidth, 4);
+					ctx.fillRect(x - hpWidth/2, y - 40, hpWidth, 4);
 					
 					var width = Img.player.width * 2;
 					var height = Img.player.width * 2;
 
-					ctx.drawImage(Img.player, 0, 0, Img.player.width, Img.player.height, self.x-width/2, self.y-height/2, width, height);
+					ctx.drawImage(Img.player, 0, 0, Img.player.width, Img.player.height, x-width/2, y-height/2, width, height);
 				}
 
 				Player.list[self.id] = self;
@@ -67,7 +73,10 @@
 					var width = Img.bullet.width/2;
 					var height = Img.bullet.width/2;
 
-					ctx.drawImage(Img.bullet, 0, 0, Img.bullet.width, Img.bullet.height, self.x-width/2, self.y-height/2, width, height);
+					var x = self.x - Player.list[selfId].x + WIDTH/2;
+					var y = self.y - Player.list[selfId].y + HEIGHT/2;
+
+					ctx.drawImage(Img.bullet, 0, 0, Img.bullet.width, Img.bullet.height, x-width/2, y-height/2, width, height);
 				}
 
 				Bullet.list[self.id] = self;
@@ -131,7 +140,9 @@
 			});
 
 			setInterval(function(){
-				ctx.clearRect(0,0,1000,650);
+				if(!selfId)
+					return;
+				ctx.clearRect(0,0,WIDTH,HEIGHT);
 				drawMap();
 				drawScore();
 				for(var i in Player.list){
@@ -143,7 +154,9 @@
 			}, 40);
 
 			var drawMap = function(){
-				ctx.drawImage(Img.map, 0, 0);
+				var x = WIDTH/2 - Player.list[selfId].x;
+				var y = HEIGHT/2 - Player.list[selfId].y;
+				ctx.drawImage(Img.map, x, y);
 			}
 
 			var drawScore = function(){
