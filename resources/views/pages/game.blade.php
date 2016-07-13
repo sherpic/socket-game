@@ -160,7 +160,7 @@
 			}
 
 			var drawScore = function(){
-				ctx.fillStyle = 'white';
+				ctx.fillStyle = 'black';
 				ctx.fillText(Player.list[selfId].score, 0, 30);
 			}
 
