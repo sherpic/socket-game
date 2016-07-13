@@ -7,10 +7,11 @@ var serv = http.createServer(app);
 
 var io = socket.listen(serv);
 
-serv.listen(8001);
-console.log("Server started.");
-
 var SOCKET_LIST = {};
+var PORT = 8001;
+
+serv.listen(PORT);
+console.log("Server started.");
 
 var Entity = function(){
 	var self = {

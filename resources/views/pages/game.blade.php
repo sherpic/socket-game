@@ -16,11 +16,14 @@
 			var WIDTH = 1000;
 			var HEIGHT = 650;
 
+			var SERVER_NAME = "{{ $_SERVER['SERVER_NAME'] }}";
+			var SERVER_PORT = 8001;
+
 			var chatText = document.getElementById('chat-text');
 			var chatInput = document.getElementById('chat-input');
 			var chatForm = document.getElementById('chat-form');
 
-			var socket = io.connect('http://localhost:8001');
+			var socket = io.connect(SERVER_NAME + ':' + SERVER_PORT);
 
 			var Img = {};
 			Img.player = new Image();
