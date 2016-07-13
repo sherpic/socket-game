@@ -51,8 +51,8 @@
 					ctx.fillStyle = 'red';
 					ctx.fillRect(x - hpWidth/2, y - 40, hpWidth, 4);
 					
-					var width = Img.player.width * 2;
-					var height = Img.player.width * 2;
+					var width = Img.player.width;
+					var height = Img.player.width;
 
 					ctx.drawImage(Img.player, 0, 0, Img.player.width, Img.player.height, x-width/2, y-height/2, width, height);
 				}
