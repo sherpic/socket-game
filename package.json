@@ -6,11 +6,15 @@
   "private": true,
   "scripts": {
     "prod": "gulp --production",
-    "dev": "gulp watch"
+    "dev": "gulp watch",
+    "start": "node app.js"
   },
   "dependencies": {
     "express": "^4.14.0",
     "socket.io": "^1.4.8"
+  },
+  "engines": {
+    "node": "4.1.x"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
