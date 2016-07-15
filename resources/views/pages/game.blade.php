@@ -2,14 +2,12 @@
 
 @section('content')
 	<canvas id="ctx"></canvas>
-
-	<div id="chat-text" style="width:1000px; height:100px; overflow-y:scroll">
+	<!-- <div id="chat-text" style="width:1000px; height:100px; overflow-y:scroll">
 	</div>
 
 	<form id="chat-form">
 		<input id="chat-input" type="text" style="width:1000px"></input>
-	</form>
-
+	</form> -->
 	<script src="//cdn.socket.io/socket.io-1.0.0.js"></script>
 	<script>
 		//Game Window Environment
@@ -22,9 +20,9 @@
 		var socket = io.connect(SERVER_NAME + ':' + SERVER_PORT);
 
 		//Chat Data
-		var chatText = document.getElementById('chat-text');
+		/*var chatText = document.getElementById('chat-text');
 		var chatInput = document.getElementById('chat-input');
-		var chatForm = document.getElementById('chat-form');
+		var chatForm = document.getElementById('chat-form');*/
 
 		//Images
 		var Img = {};
@@ -173,7 +171,7 @@
 			ctx.fillText(Player.list[selfId].score, 0, 30);
 		}
 
-		socket.on('addToChat', function(data){
+		/*socket.on('addToChat', function(data){
 			chatText.innerHTML += '<div>' + data + '</div>';
 		});
 		socket.on('evalAnswer', function(data){
@@ -187,7 +185,7 @@
 			else
 				socket.emit('sendMsgToServer', chatInput.value);
 			chatInput.value = '';
-		}
+		}*/
 
 		document.onkeydown = function(event){
 			if(event.keyCode == 68) //d
