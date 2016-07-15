@@ -10,7 +10,8 @@
 	</form> -->
 	<script src="//cdn.socket.io/socket.io-1.0.0.js"></script>
 	<script>
-		//Game Window Environment
+		//Game Environment
+		var DEBUG = true;
 		var WIDTH = window.innerWidth;
 		var HEIGHT = window.innerHeight - 51; //-50px for navbar -1px for navbar border
 
@@ -37,7 +38,7 @@
 		var ctx = document.getElementById("ctx").getContext("2d");
 		ctx.canvas.width  = WIDTH;
   		ctx.canvas.height = HEIGHT;
-  		ctx.font = '30px Arial';
+  		ctx.font = '14px Arial';
   		$('body').on('contextmenu', '#ctx', function(e){ return false; });
 
 		var Player = function(initPack){
@@ -158,6 +159,9 @@
 			for(var i in Bullet.list){
 				Bullet.list[i].draw();
 			}
+			if(DEBUG){
+				drawDebugVariables();
+			}
 		}, 40);
 
 		var drawMap = function(){
@@ -167,10 +171,21 @@
 		}
 
 		var drawScore = function(){
-			ctx.fillStyle = 'black';
-			ctx.fillText(Player.list[selfId].score, 0, 30);
+			ctx.fillText("Score: " + Player.list[selfId].score, 0, 15);
 		}
 
+		var drawDebugVariables = function(){
+			var playerData = Player.list[selfId];
+
+			ctx.fillStyle = 'black';
+			ctx.fillText("ID: " + playerData.number, 0, 30);
+			ctx.fillText("X: " + playerData.x, 0, 45);
+			ctx.fillText("Y: " + playerData.y, 0, 60);
+			ctx.fillText("HP: " + playerData.hp, 0, 75);
+			ctx.fillText("HP Max: " + playerData.hpMax, 0, 90);
+		}
+
+		//Chat (Disabled until needed again)
 		/*socket.on('addToChat', function(data){
 			chatText.innerHTML += '<div>' + data + '</div>';
 		});
@@ -215,9 +230,10 @@
 			socket.emit('keyPress', {inputId:'attack', state:false});
 		}
 		document.onmousemove = function(event){
-			var x = -250 + event.clientX - 8;
-			var y = -250 + event.clientY - 8;
+			var x = event.clientX - Player.list[selfId].x;
+			var y = event.clientY - Player.list[selfId].y;
 			var angle = Math.atan2(y,x) / Math.PI * 180;
+			console.log("X: "+ x + "Y: "+y);
 			socket.emit('keyPress', {inputId:'mouseAngle', state:angle});
 		}
 	</script>

@@ -15,20 +15,17 @@ console.log("Server started.");
 
 var Entity = function(param){
 	var self = {
-		x:250,
-		y:250,
+		x:1250,
+		y:1250,
 		spdX:0,
 		spdY:0,
 		id:"",
-		map:'map',
 	}
 	if(param){
 		if(param.x)
 			self.x = param.x;
 		if(param.y)
 			self.y = param.y;
-		if(param.map)
-			self.map = param.map;
 		if(param.id)
 			self.id = param.id;
 	}
@@ -37,6 +34,12 @@ var Entity = function(param){
 		self.updatePosition();
 	}
 	self.updatePosition = function(){
+		if(self.x <= 0){
+			self.x += (self.spdX/2);
+		}
+		else if(self.y <= 0){
+			self.y += (self.spdY/2);
+		}
 		self.x += self.spdX;
 		self.y += self.spdY;
 	}
@@ -112,6 +115,7 @@ var Player = function(param){
 			y: self.y,
 			hp:self.hp,
 			score:self.score,
+			hpMax:self.hpMax,
 		};
 	}
 
