@@ -15,8 +15,8 @@ console.log("Server started.");
 
 var Entity = function(param){
 	var self = {
-		x:1250,
-		y:1250,
+		x:0,
+		y:0,
 		spdX:0,
 		spdY:0,
 		id:"",
@@ -34,14 +34,22 @@ var Entity = function(param){
 		self.updatePosition();
 	}
 	self.updatePosition = function(){
-		if(self.x <= 0){
-			self.x += (self.spdX/2);
+		if(self.x < -1165){
+			self.x = -1165;
 		}
-		else if(self.y <= 0){
-			self.y += (self.spdY/2);
+		else if(self.x > 2265){
+			self.x = 2265;
 		}
-		self.x += self.spdX;
-		self.y += self.spdY;
+		else if(self.y < -545){
+			self.y = -545;
+		}
+		else if(self.y > 2390){
+			self.y = 2390;
+		}
+		else{
+			self.x += self.spdX;
+			self.y += self.spdY;
+		}
 	}
 	self.getDistance = function(pt){
 		return Math.sqrt(Math.pow(self.x-pt.x,2) + Math.pow(self.y-pt.y,2));

@@ -14,6 +14,8 @@
 		var DEBUG = true;
 		var WIDTH = window.innerWidth;
 		var HEIGHT = window.innerHeight - 51; //-50px for navbar -1px for navbar border
+		var GAME_ARENA_WIDTH = 3000;
+		var GAME_ARENA_HEIGHT = 2500;
 
 		//Connection Information
 		var SERVER_NAME = "{{ $_SERVER['SERVER_NAME'] }}";
@@ -33,6 +35,8 @@
 		Img.bullet.src = '/img/bullet.png';
 		Img.map = new Image();
 		Img.map.src = '/img/map.png';
+		Img.outerMap = new Image();
+		Img.outerMap.src = '/img/outer_map.png';
 
 		//Canvas Setup
 		var ctx = document.getElementById("ctx").getContext("2d");
@@ -151,23 +155,34 @@
 			if(!selfId)
 				return;
 			ctx.clearRect(0,0,WIDTH,HEIGHT);
+
 			drawMap();
-			drawScore();
+
+			if(DEBUG){
+				drawDebugVariables();
+			}else{
+				drawScore();
+			}
+
 			for(var i in Player.list){
 				Player.list[i].draw();
 			}
 			for(var i in Bullet.list){
 				Bullet.list[i].draw();
 			}
-			if(DEBUG){
-				drawDebugVariables();
-			}
 		}, 40);
 
 		var drawMap = function(){
-			var x = WIDTH/2 - Player.list[selfId].x;
-			var y = HEIGHT/2 - Player.list[selfId].y;
-			ctx.drawImage(Img.map, x, y);
+			var mapWidth = Img.map.width;
+			var mapHeight = Img.map.height;
+			var playerXPosition = Player.list[selfId].x;
+			var playerYPosition = Player.list[selfId].y;
+			
+			for(x = -playerXPosition; x <= -playerXPosition+GAME_ARENA_WIDTH; x += mapWidth){
+				for(y = -playerYPosition; y <= -playerYPosition+GAME_ARENA_HEIGHT; y += mapHeight){
+					ctx.drawImage(Img.map, x, y);
+				}
+			}
 		}
 
 		var drawScore = function(){
@@ -177,12 +192,13 @@
 		var drawDebugVariables = function(){
 			var playerData = Player.list[selfId];
 
-			ctx.fillStyle = 'black';
-			ctx.fillText("ID: " + playerData.number, 0, 30);
-			ctx.fillText("X: " + playerData.x, 0, 45);
-			ctx.fillText("Y: " + playerData.y, 0, 60);
-			ctx.fillText("HP: " + playerData.hp, 0, 75);
-			ctx.fillText("HP Max: " + playerData.hpMax, 0, 90);
+			ctx.fillText("Debug", 0, 15);
+			ctx.fillText("Score: " + Player.list[selfId].score, 0, 30);
+			ctx.fillText("ID: " + playerData.number, 0, 45);
+			ctx.fillText("X: " + playerData.x, 0, 60);
+			ctx.fillText("Y: " + playerData.y, 0, 75);
+			ctx.fillText("HP: " + playerData.hp, 0, 90);
+			ctx.fillText("HP Max: " + playerData.hpMax, 0, 105);
 		}
 
 		//Chat (Disabled until needed again)
@@ -233,7 +249,6 @@
 			var x = event.clientX - Player.list[selfId].x;
 			var y = event.clientY - Player.list[selfId].y;
 			var angle = Math.atan2(y,x) / Math.PI * 180;
-			console.log("X: "+ x + "Y: "+y);
 			socket.emit('keyPress', {inputId:'mouseAngle', state:angle});
 		}
 	</script>
