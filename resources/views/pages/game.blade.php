@@ -51,6 +51,7 @@
 			self.number = initPack.number;
 			self.x = initPack.x;
 			self.y = initPack.y;
+			self.mouseAngle = initPack.mouseAngle;
 			self.hp = initPack.hp;
 			self.hpMax = initPack.hpMax;
 			self.score = initPack.score;
@@ -197,8 +198,9 @@
 			ctx.fillText("ID: " + playerData.number, 0, 45);
 			ctx.fillText("X: " + playerData.x, 0, 60);
 			ctx.fillText("Y: " + playerData.y, 0, 75);
-			ctx.fillText("HP: " + playerData.hp, 0, 90);
-			ctx.fillText("HP Max: " + playerData.hpMax, 0, 105);
+			ctx.fillText("Angle: " + playerData.mouseAngle, 0, 90);
+			ctx.fillText("HP: " + playerData.hp, 0, 105);
+			ctx.fillText("HP Max: " + playerData.hpMax, 0, 120);
 		}
 
 		//Chat (Disabled until needed again)
@@ -246,9 +248,13 @@
 			socket.emit('keyPress', {inputId:'attack', state:false});
 		}
 		document.onmousemove = function(event){
-			var x = event.clientX - Player.list[selfId].x;
-			var y = event.clientY - Player.list[selfId].y;
-			var angle = Math.atan2(y,x) / Math.PI * 180;
+			console.log("Mouse X: " + event.x + "  Mouse Y: " + event.y);
+			console.log("Playr X: " + Player.list[selfId].x + "  Playr Y: " + Player.list[selfId].y);
+			
+			var angle = Math.atan2((HEIGHT/2) - event.y, (WIDTH/2) - event.x) * 180 / Math.PI + 180;
+
+			console.log("Angle: " + angle);
+
 			socket.emit('keyPress', {inputId:'mouseAngle', state:angle});
 		}
 	</script>
