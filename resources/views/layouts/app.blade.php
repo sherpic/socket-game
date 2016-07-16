@@ -31,7 +31,7 @@
 </head>
 <body id="app-layout">
     <nav class="navbar navbar-default navbar-static-top margin-bottom-0px">
-        <div class="container">
+        <div class="container-fluid">
             <div class="navbar-header">
                 <!-- Collapsed Hamburger -->
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
@@ -62,7 +62,6 @@
                     @endif
                 </ul>
             </div>
-        </div>
     </nav>
 
     @yield('content')
