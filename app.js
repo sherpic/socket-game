@@ -34,17 +34,23 @@ var Entity = function(param){
 		self.updatePosition();
 	}
 	self.updatePosition = function(){
-		if(self.x < -1165){
-			self.x = -1165;
-		}
-		else if(self.x > 2265){
-			self.x = 2265;
-		}
-		else if(self.y < -545){
-			self.y = -545;
-		}
-		else if(self.y > 2390){
-			self.y = 2390;
+		if(self.affectedByBoundaries){
+			if(self.x < -1165){
+				self.x = -1165;
+			}
+			else if(self.x > 2265){
+				self.x = 2265;
+			}
+			else if(self.y < -545){
+				self.y = -545;
+			}
+			else if(self.y > 2390){
+				self.y = 2390;
+			}
+			else{
+				self.x += self.spdX;
+				self.y += self.spdY;
+			}
 		}
 		else{
 			self.x += self.spdX;
@@ -68,6 +74,7 @@ var Player = function(param){
 	self.pressingAttack = false;
 	self.mouseAngle = 0;
 	self.maxSpd = 10;
+	self.affectedByBoundaries = true;
 	self.hp = 10;
 	self.hpMax = 10;
 	self.score = 0;
@@ -188,6 +195,7 @@ var Bullet = function(param){
 	self.angle = param.angle;
 	self.spdX = Math.cos(param.angle/180*Math.PI) * 10;
 	self.spdY = Math.sin(param.angle/180*Math.PI) * 10;
+	self.affectedByBoundaries = false;
 	self.parent = param.parent;
 
 	self.timer = 0;

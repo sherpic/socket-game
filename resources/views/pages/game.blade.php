@@ -174,13 +174,13 @@
 		}, 40);
 
 		var drawMap = function(){
-			var mapWidth = Img.map.width;
-			var mapHeight = Img.map.height;
+			var mapTileWidth = Img.map.width;
+			var mapTileHeight = Img.map.height;
 			var playerXPosition = Player.list[selfId].x;
 			var playerYPosition = Player.list[selfId].y;
 			
-			for(x = -playerXPosition; x <= -playerXPosition+GAME_ARENA_WIDTH; x += mapWidth){
-				for(y = -playerYPosition; y <= -playerYPosition+GAME_ARENA_HEIGHT; y += mapHeight){
+			for(x = -playerXPosition; x <= -playerXPosition+GAME_ARENA_WIDTH; x += mapTileWidth){
+				for(y = -playerYPosition; y <= -playerYPosition+GAME_ARENA_HEIGHT; y += mapTileHeight){
 					ctx.drawImage(Img.map, x, y);
 				}
 			}
