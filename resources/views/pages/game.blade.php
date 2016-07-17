@@ -16,6 +16,8 @@
 		var GAME_ARENA_HEIGHT = 800;
 		var gamePageWidth = getWindowWidth();
 		var gamePageHeight = getWindowHeight();
+		var playerDiameter = getPlayerDiameter();
+  		var bulletDiameter = getBulletDiameter();
 		var selfId = null;
 
 		//Connection Information
@@ -27,11 +29,6 @@
 		/*var chatText = document.getElementById('chat-text');
 		var chatInput = document.getElementById('chat-input');
 		var chatForm = document.getElementById('chat-form');*/
-
-		//Images
-		var Img = {};
-		Img.bullet = new Image();
-		Img.bullet.src = '/img/bullet.png';
 
 		//Canvas Setup
 		var ctx = document.getElementById("ctx").getContext("2d");
@@ -61,15 +58,13 @@
 				var y = self.y - Player.list[selfId].y + getDrawPosition('y');
 				
 				var hpWidth = gamePageWidth * 0.04 * self.hp / self.hpMax;
-				var playerWidth = gamePageWidth * 0.02;
-				var playerHeight = gamePageHeight * 0.02;
 
 				ctx.fillStyle = 'red';
-				ctx.fillRect(x - hpWidth/1.96, y + gamePageWidth * 0.033, hpWidth, gamePageHeight * 0.003);
+				ctx.fillRect(x - hpWidth/1.96, y + gamePageWidth * 0.022, hpWidth, gamePageHeight * 0.003);
 
 				//Player Ball
-				drawCircle(x, y, playerWidth - 5);
-				drawCircle(x, y, playerWidth);
+				drawCircle(x, y, playerDiameter - gamePageHeight * 0.005);
+				drawCircle(x, y, playerDiameter);
 				ctx.fillRect(x, y, 1, 1); //Middle Point
 			}
 
@@ -86,13 +81,9 @@
 			self.y = initPack.y;
 
 			self.draw = function(){
-				var width = Img.bullet.width/2;
-				var height = Img.bullet.width/2;
-
-				var x = self.x - Player.list[selfId].x + gamePageWidth/2;
-				var y = self.y - Player.list[selfId].y + gamePageHeight/2;
-
-				ctx.drawImage(Img.bullet, 0, 0, Img.bullet.width, Img.bullet.height, x-width/2, y-height/2, width, height);
+				var x = self.x - Player.list[selfId].x + getDrawPosition('x');
+				var y = self.y - Player.list[selfId].y + getDrawPosition('y');
+				drawCircle(x, y, bulletDiameter);
 			}
 
 			Bullet.list[self.id] = self;
@@ -216,6 +207,14 @@
 			ctx.stroke();
 		}
 
+		function getPlayerDiameter(){
+			return gamePageWidth * 0.02;
+		}
+
+		function getBulletDiameter(){
+			return playerDiameter / 4;
+		}
+
 		function getWindowWidth(){
 			return window.innerWidth;
 		}
@@ -240,6 +239,8 @@
 			ctx.canvas.height = gamePageHeight;
 			xDrawPosition = getDrawPosition('x');
   			yDrawPosition = getDrawPosition('y');
+  			playerDiameter = getPlayerDiameter();
+  		 	bulletDiameter = getBulletDiameter();
 		}
 
 		document.onkeydown = function(event){
