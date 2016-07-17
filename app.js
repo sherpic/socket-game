@@ -38,14 +38,14 @@ var Entity = function(param){
 			if(self.x < 0){
 				self.x = 0;
 			}
-			else if(self.x > 300){
-				self.x = 300;
+			else if(self.x > 800){
+				self.x = 800;
 			}
 			else if(self.y < 0){
 				self.y = 0;
 			}
-			else if(self.y > 250){
-				self.y = 250;
+			else if(self.y > 800){
+				self.y = 800;
 			}
 			else{
 				self.x += self.spdX;

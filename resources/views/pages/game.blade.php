@@ -12,10 +12,10 @@
 	<script>
 		//Game Environment
 		var DEBUG = true;
-		var GAME_ARENA_WIDTH = 300;
-		var GAME_ARENA_HEIGHT = 250;
-		var gamePageWidth = window.innerWidth;
-		var gamePageHeight = window.innerHeight - 51; //-50px for navbar -1px for navbar border
+		var GAME_ARENA_WIDTH = 800;
+		var GAME_ARENA_HEIGHT = 800;
+		var gamePageWidth = getWindowWidth();
+		var gamePageHeight = getWindowHeight();
 		var selfId = null;
 
 		//Connection Information
@@ -39,11 +39,11 @@
   		ctx.canvas.height = gamePageHeight;
   		ctx.font = '14px Arial';
 
-  		var xDrawPosition = window.innerWidth/2;
-  		var yDrawPosition = (window.innerHeight - 51)/2;
+  		var xDrawPosition = getDrawPosition('x');
+  		var yDrawPosition = getDrawPosition('y');
 
-  		$('body').on('contextmenu', '#ctx', function(e){ return false; });
-  		window.addEventListener('resize', resizeCanvas, false);
+  		$('body').on('contextmenu', '#ctx', function(e){ return false; }); //Disables right-click
+  		$(window).resize(function(){ resizeCanvas(); });
 
 		var Player = function(initPack){
 			var self = {};
@@ -57,15 +57,15 @@
 			self.score = initPack.score;
 
 			self.draw = function(){
-				var x = self.x - Player.list[selfId].x + gamePageWidth/2;
-				var y = self.y - Player.list[selfId].y + gamePageHeight/2;
+				var x = self.x - Player.list[selfId].x + getDrawPosition('x');
+				var y = self.y - Player.list[selfId].y + getDrawPosition('y');
 				
-				var hpWidth = window.innerWidth * 0.04 * self.hp / self.hpMax;
-				var playerWidth = window.innerWidth * 0.02;
-				var playerHeight = window.innerHeight * 0.02;
+				var hpWidth = gamePageWidth * 0.04 * self.hp / self.hpMax;
+				var playerWidth = gamePageWidth * 0.02;
+				var playerHeight = gamePageHeight * 0.02;
 
 				ctx.fillStyle = 'red';
-				ctx.fillRect(x - hpWidth/1.96, y + window.innerWidth * 0.033, hpWidth, window.innerWidth * 0.003);
+				ctx.fillRect(x - hpWidth/1.96, y + gamePageWidth * 0.033, hpWidth, gamePageHeight * 0.003);
 
 				//Player Ball
 				drawCircle(x, y, playerWidth - 5);
@@ -156,9 +156,8 @@
 		setInterval(function(){
 			if(!selfId)
 				return;
-			ctx.clearRect(0,0,gamePageWidth,gamePageHeight);
 
-			resizeCanvas();
+			ctx.clearRect(0,0,gamePageWidth,gamePageHeight);
 			drawMap();
 
 			if(DEBUG){
@@ -174,15 +173,6 @@
 				Bullet.list[i].draw();
 			}
 		}, 40);
-
-		var resizeCanvas = function(){
-			gamePageWidth = window.innerWidth;
-			gamePageHeight = window.innerHeight - 51; //-50px for navbar -1px for navbar border
-			ctx.canvas.width = gamePageWidth;
-			ctx.canvas.height = gamePageHeight;
-			xDrawPosition = window.innerWidth/2;
-  			yDrawPosition = (window.innerHeight - 51)/2;
-		}
 
 		var drawMap = function(){
 			var originX = xDrawPosition - Player.list[selfId].x;
@@ -226,6 +216,32 @@
 			ctx.stroke();
 		}
 
+		function getWindowWidth(){
+			return window.innerWidth;
+		}
+
+		function getWindowHeight(){
+			return window.innerHeight - 51; //-51px for navbar -1px for navbar border
+		}
+
+		function getDrawPosition(axis){
+			if(axis == 'x'){
+				return gamePageWidth/2;
+			}
+			else if(axis == 'y'){
+				return gamePageHeight/2;
+			}
+		}
+
+		function resizeCanvas(){
+			gamePageWidth = getWindowWidth();
+			gamePageHeight = getWindowHeight();
+			ctx.canvas.width = gamePageWidth;
+			ctx.canvas.height = gamePageHeight;
+			xDrawPosition = getDrawPosition('x');
+  			yDrawPosition = getDrawPosition('y');
+		}
+
 		document.onkeydown = function(event){
 			if(event.keyCode == 68) //d
 				socket.emit('keyPress',{inputId: 'right', state: true});
@@ -257,7 +273,7 @@
 			/*console.log("Mouse X: " + event.x + "  Mouse Y: " + event.y);
 			console.log("Playr X: " + Player.list[selfId].x + "  Playr Y: " + Player.list[selfId].y);*/
 			
-			var angle = Math.atan2((gamePageHeight/2) - event.y, (gamePageWidth/2) - event.x) * 180 / Math.PI + 180;
+			var angle = Math.atan2(getDrawPosition('y') - event.y, getDrawPosition('x') - event.x) * 180 / Math.PI + 180;
 
 			//console.log("Angle: " + angle);
 
