@@ -15,8 +15,8 @@ console.log("Server started.");
 
 var Entity = function(param){
 	var self = {
-		x:0,
-		y:0,
+		x:50,
+		y:50,
 		spdX:0,
 		spdY:0,
 		id:"",
@@ -35,17 +35,17 @@ var Entity = function(param){
 	}
 	self.updatePosition = function(){
 		if(self.affectedByBoundaries){
-			if(self.x < -1165){
-				self.x = -1165;
+			if(self.x < 0){
+				self.x = 0;
 			}
-			else if(self.x > 2265){
-				self.x = 2265;
+			else if(self.x > 3000){
+				self.x = 3000;
 			}
-			else if(self.y < -545){
-				self.y = -545;
+			else if(self.y < 0){
+				self.y = 0;
 			}
-			else if(self.y > 2390){
-				self.y = 2390;
+			else if(self.y > 2500){
+				self.y = 2500;
 			}
 			else{
 				self.x += self.spdX;

@@ -12,10 +12,11 @@
 	<script>
 		//Game Environment
 		var DEBUG = true;
-		var WIDTH = window.innerWidth;
-		var HEIGHT = window.innerHeight - 51; //-50px for navbar -1px for navbar border
 		var GAME_ARENA_WIDTH = 3000;
 		var GAME_ARENA_HEIGHT = 2500;
+		var gamePageWidth = window.innerWidth;
+		var gamePageHeight = window.innerHeight - 51; //-50px for navbar -1px for navbar border
+		var selfId = null;
 
 		//Connection Information
 		var SERVER_NAME = "{{ $_SERVER['SERVER_NAME'] }}";
@@ -29,21 +30,20 @@
 
 		//Images
 		var Img = {};
-		Img.player = new Image();
-		Img.player.src = '/img/player.png';
 		Img.bullet = new Image();
 		Img.bullet.src = '/img/bullet.png';
-		Img.map = new Image();
-		Img.map.src = '/img/map.png';
-		Img.outerMap = new Image();
-		Img.outerMap.src = '/img/outer_map.png';
 
 		//Canvas Setup
 		var ctx = document.getElementById("ctx").getContext("2d");
-		ctx.canvas.width  = WIDTH;
-  		ctx.canvas.height = HEIGHT;
+		ctx.canvas.width  = gamePageWidth;
+  		ctx.canvas.height = gamePageHeight;
   		ctx.font = '14px Arial';
+
+  		var xDrawPosition = window.innerWidth/2;
+  		var yDrawPosition = (window.innerHeight - 51)/2;
+
   		$('body').on('contextmenu', '#ctx', function(e){ return false; });
+  		window.addEventListener('resize', resizeCanvas, false);
 
 		var Player = function(initPack){
 			var self = {};
@@ -57,17 +57,20 @@
 			self.score = initPack.score;
 
 			self.draw = function(){
-				var x = self.x - Player.list[selfId].x + WIDTH/2;
-				var y = self.y - Player.list[selfId].y + HEIGHT/2;
-				var hpWidth = 30 * self.hp / self.hpMax;
+				var x = self.x - Player.list[selfId].x + gamePageWidth/2;
+				var y = self.y - Player.list[selfId].y + gamePageHeight/2;
+				
+				var hpWidth = window.innerWidth * 0.04 * self.hp / self.hpMax;
+				var playerWidth = window.innerWidth * 0.02;
+				var playerHeight = window.innerHeight * 0.02;
 
 				ctx.fillStyle = 'red';
-				ctx.fillRect(x - hpWidth/2, y - 40, hpWidth, 4);
-				
-				var width = Img.player.width;
-				var height = Img.player.width;
+				ctx.fillRect(x - hpWidth/1.96, y + window.innerWidth * 0.033, hpWidth, window.innerWidth * 0.003);
 
-				ctx.drawImage(Img.player, 0, 0, Img.player.width, Img.player.height, x-width/2, y-height/2, width, height);
+				//Player Ball
+				drawCircle(x, y, playerWidth - 5);
+				drawCircle(x, y, playerWidth);
+				ctx.fillRect(x, y, 1, 1); //Middle Point
 			}
 
 			Player.list[self.id] = self;
@@ -86,8 +89,8 @@
 				var width = Img.bullet.width/2;
 				var height = Img.bullet.width/2;
 
-				var x = self.x - Player.list[selfId].x + WIDTH/2;
-				var y = self.y - Player.list[selfId].y + HEIGHT/2;
+				var x = self.x - Player.list[selfId].x + gamePageWidth/2;
+				var y = self.y - Player.list[selfId].y + gamePageHeight/2;
 
 				ctx.drawImage(Img.bullet, 0, 0, Img.bullet.width, Img.bullet.height, x-width/2, y-height/2, width, height);
 			}
@@ -96,8 +99,6 @@
 			return self;
 		}
 		Bullet.list = {};
-
-		var selfId = null;
 
 		socket.on('init', function(data){
 			if(data.selfId)
@@ -155,8 +156,9 @@
 		setInterval(function(){
 			if(!selfId)
 				return;
-			ctx.clearRect(0,0,WIDTH,HEIGHT);
+			ctx.clearRect(0,0,gamePageWidth,gamePageHeight);
 
+			resizeCanvas();
 			drawMap();
 
 			if(DEBUG){
@@ -173,17 +175,16 @@
 			}
 		}, 40);
 
+		var resizeCanvas = function(){
+			gamePageWidth = window.innerWidth;
+			gamePageHeight = window.innerHeight - 51; //-50px for navbar -1px for navbar border
+			ctx.canvas.width = gamePageWidth;
+			ctx.canvas.height = gamePageHeight;
+		}
+
 		var drawMap = function(){
-			var mapTileWidth = Img.map.width;
-			var mapTileHeight = Img.map.height;
-			var playerXPosition = Player.list[selfId].x;
-			var playerYPosition = Player.list[selfId].y;
-			
-			for(x = -playerXPosition; x <= -playerXPosition+GAME_ARENA_WIDTH; x += mapTileWidth){
-				for(y = -playerYPosition; y <= -playerYPosition+GAME_ARENA_HEIGHT; y += mapTileHeight){
-					ctx.drawImage(Img.map, x, y);
-				}
-			}
+			drawLine(xDrawPosition - Player.list[selfId].x, yDrawPosition - Player.list[selfId].y, xDrawPosition - Player.list[selfId].x, GAME_ARENA_HEIGHT + Player.list[selfId].y);
+			drawLine(xDrawPosition - Player.list[selfId].x, yDrawPosition - Player.list[selfId].y, GAME_ARENA_WIDTH - Player.list[selfId].x, yDrawPosition - Player.list[selfId].y);
 		}
 
 		var drawScore = function(){
@@ -203,22 +204,18 @@
 			ctx.fillText("HP Max: " + playerData.hpMax, 0, 120);
 		}
 
-		//Chat (Disabled until needed again)
-		/*socket.on('addToChat', function(data){
-			chatText.innerHTML += '<div>' + data + '</div>';
-		});
-		socket.on('evalAnswer', function(data){
-			console.log(data);
-		});
+		var drawLine = function(originX, originY, destinationX, destinationY){
+			ctx.beginPath();
+			ctx.moveTo(originX, originY);
+			ctx.lineTo(destinationX, destinationY);
+			ctx.stroke();
+		}
 
-		chatForm.onsubmit = function(e){
-			e.preventDefault();
-			if(chatInput.value[0] === '/')
-				socket.emit('evalServer', chatInput.values.slice(1));
-			else
-				socket.emit('sendMsgToServer', chatInput.value);
-			chatInput.value = '';
-		}*/
+		var drawCircle = function(x, y, diameter){
+			ctx.beginPath();
+			ctx.arc(x, y, diameter, 0, 2 * Math.PI);
+			ctx.stroke();
+		}
 
 		document.onkeydown = function(event){
 			if(event.keyCode == 68) //d
@@ -248,14 +245,31 @@
 			socket.emit('keyPress', {inputId:'attack', state:false});
 		}
 		document.onmousemove = function(event){
-			console.log("Mouse X: " + event.x + "  Mouse Y: " + event.y);
-			console.log("Playr X: " + Player.list[selfId].x + "  Playr Y: " + Player.list[selfId].y);
+			/*console.log("Mouse X: " + event.x + "  Mouse Y: " + event.y);
+			console.log("Playr X: " + Player.list[selfId].x + "  Playr Y: " + Player.list[selfId].y);*/
 			
-			var angle = Math.atan2((HEIGHT/2) - event.y, (WIDTH/2) - event.x) * 180 / Math.PI + 180;
+			var angle = Math.atan2((gamePageHeight/2) - event.y, (gamePageWidth/2) - event.x) * 180 / Math.PI + 180;
 
-			console.log("Angle: " + angle);
+			//console.log("Angle: " + angle);
 
 			socket.emit('keyPress', {inputId:'mouseAngle', state:angle});
 		}
+
+		//Chat (Disabled until needed again)
+		/*socket.on('addToChat', function(data){
+			chatText.innerHTML += '<div>' + data + '</div>';
+		});
+		socket.on('evalAnswer', function(data){
+			console.log(data);
+		});
+
+		chatForm.onsubmit = function(e){
+			e.preventDefault();
+			if(chatInput.value[0] === '/')
+				socket.emit('evalServer', chatInput.values.slice(1));
+			else
+				socket.emit('sendMsgToServer', chatInput.value);
+			chatInput.value = '';
+		}*/
 	</script>
 @stop
