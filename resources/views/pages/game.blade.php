@@ -180,6 +180,8 @@
 			gamePageHeight = window.innerHeight - 51; //-50px for navbar -1px for navbar border
 			ctx.canvas.width = gamePageWidth;
 			ctx.canvas.height = gamePageHeight;
+			xDrawPosition = window.innerWidth/2;
+  			yDrawPosition = (window.innerHeight - 51)/2;
 		}
 
 		var drawMap = function(){
