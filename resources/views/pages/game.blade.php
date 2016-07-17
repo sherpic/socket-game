@@ -12,8 +12,8 @@
 	<script>
 		//Game Environment
 		var DEBUG = true;
-		var GAME_ARENA_WIDTH = 3000;
-		var GAME_ARENA_HEIGHT = 2500;
+		var GAME_ARENA_WIDTH = 300;
+		var GAME_ARENA_HEIGHT = 250;
 		var gamePageWidth = window.innerWidth;
 		var gamePageHeight = window.innerHeight - 51; //-50px for navbar -1px for navbar border
 		var selfId = null;
@@ -185,8 +185,15 @@
 		}
 
 		var drawMap = function(){
-			drawLine(xDrawPosition - Player.list[selfId].x, yDrawPosition - Player.list[selfId].y, xDrawPosition - Player.list[selfId].x, GAME_ARENA_HEIGHT + Player.list[selfId].y);
-			drawLine(xDrawPosition - Player.list[selfId].x, yDrawPosition - Player.list[selfId].y, GAME_ARENA_WIDTH - Player.list[selfId].x, yDrawPosition - Player.list[selfId].y);
+			var originX = xDrawPosition - Player.list[selfId].x;
+			var originY = yDrawPosition - Player.list[selfId].y;
+			var limitXPosition = GAME_ARENA_WIDTH - Player.list[selfId].x + xDrawPosition;
+			var limitYPosition = GAME_ARENA_HEIGHT - Player.list[selfId].y + yDrawPosition;
+
+			drawLine(originX, originY, limitXPosition, originY); //Top Horizontal
+			drawLine(originX, originY, originX, limitYPosition); //Left Vertical
+			drawLine(limitXPosition, originY, limitXPosition, limitYPosition); //Right Verticel
+			drawLine(originX, limitYPosition, limitXPosition, limitYPosition); //Bottom Horizontal
 		}
 
 		var drawScore = function(){
