@@ -57,15 +57,19 @@
 				var x = self.x - Player.list[selfId].x + getDrawPosition('x');
 				var y = self.y - Player.list[selfId].y + getDrawPosition('y');
 				
+				//HP Bar
 				var hpWidth = gamePageWidth * 0.04 * self.hp / self.hpMax;
-
 				ctx.fillStyle = 'red';
 				ctx.fillRect(x - hpWidth/1.96, y + gamePageWidth * 0.022, hpWidth, gamePageHeight * 0.003);
 
 				//Player Ball
-				drawCircle(x, y, playerDiameter - gamePageHeight * 0.005);
 				drawCircle(x, y, playerDiameter);
-				ctx.fillRect(x, y, 1, 1); //Middle Point
+				ctx.fillStyle = (self.id == selfId) ? '#0099ff' : '#ff1a1a';
+				ctx.fill();
+				
+				ctx.lineWidth = gamePageHeight * 0.005;
+				ctx.strokeStyle = (self.id == selfId) ? '#005c99' : '#990000';
+      			ctx.stroke();
 			}
 
 			Player.list[self.id] = self;
@@ -83,7 +87,13 @@
 			self.draw = function(){
 				var x = self.x - Player.list[selfId].x + getDrawPosition('x');
 				var y = self.y - Player.list[selfId].y + getDrawPosition('y');
+
 				drawCircle(x, y, bulletDiameter);
+				ctx.fillStyle = '#484848';
+				ctx.fill();
+				ctx.lineWidth = gamePageHeight * 0.005;
+				ctx.strokeStyle = '#000000';
+      			ctx.stroke();
 			}
 
 			Bullet.list[self.id] = self;
@@ -171,6 +181,9 @@
 			var limitXPosition = GAME_ARENA_WIDTH - Player.list[selfId].x + xDrawPosition;
 			var limitYPosition = GAME_ARENA_HEIGHT - Player.list[selfId].y + yDrawPosition;
 
+			ctx.lineWidth = 1;
+			ctx.strokeStyle = 'black';
+
 			drawLine(originX, originY, limitXPosition, originY); //Top Horizontal
 			drawLine(originX, originY, originX, limitYPosition); //Left Vertical
 			drawLine(limitXPosition, originY, limitXPosition, limitYPosition); //Right Verticel
@@ -182,8 +195,8 @@
 		}
 
 		var drawDebugVariables = function(){
+			ctx.fillStyle = 'red';
 			var playerData = Player.list[selfId];
-
 			ctx.fillText("Debug", 0, 15);
 			ctx.fillText("Score: " + Player.list[selfId].score, 0, 30);
 			ctx.fillText("ID: " + playerData.number, 0, 45);
