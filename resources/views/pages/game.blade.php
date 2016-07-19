@@ -66,7 +66,7 @@
 				drawCircle(x, y, playerDiameter);
 				ctx.fillStyle = (self.id == selfId) ? '#0099ff' : '#ff1a1a';
 				ctx.fill();
-				
+
 				ctx.lineWidth = gamePageHeight * 0.005;
 				ctx.strokeStyle = (self.id == selfId) ? '#005c99' : '#990000';
       			ctx.stroke();
@@ -128,6 +128,9 @@
 					}
 					if(pack.score !== undefined){
 						p.score = pack.score;
+					}
+					if(pack.mouseAngle !== undefined){
+						p.mouseAngle = pack.mouseAngle;
 					}
 				}
 			}
@@ -287,11 +290,11 @@
 			/*console.log("Mouse X: " + event.x + "  Mouse Y: " + event.y);
 			console.log("Playr X: " + Player.list[selfId].x + "  Playr Y: " + Player.list[selfId].y);*/
 			
-			var angle = Math.atan2(getDrawPosition('y') - event.y, getDrawPosition('x') - event.x) * 180 / Math.PI + 180;
+			var mouseAngle = Math.atan2(getDrawPosition('y') - event.y, getDrawPosition('x') - event.x) * 180 / Math.PI + 180;
 
-			//console.log("Angle: " + angle);
+			console.log("Angle: " + mouseAngle);
 
-			socket.emit('keyPress', {inputId:'mouseAngle', state:angle});
+			socket.emit('keyPress', {inputId:'mouseAngle', state:mouseAngle});
 		}
 
 		//Chat (Disabled until needed again)

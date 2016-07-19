@@ -234,6 +234,7 @@ var Bullet = function(param){
 			id:self.id,
 			x:self.x,
 			y:self.y,
+			angle:self.angle,
 		};
 	}
 	Bullet.list[self.id] = self;
