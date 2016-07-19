@@ -226,7 +226,7 @@ var Bullet = function(param){
 		return {
 			id:self.id,
 			x:self.x,
-			y:self.y
+			y:self.y,
 		};
 	}
 	self.getUpdatePack = function(){

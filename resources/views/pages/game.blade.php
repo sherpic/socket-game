@@ -83,10 +83,14 @@
 			self.id = initPack.id;
 			self.x = initPack.x;
 			self.y = initPack.y;
+			self.angle = initPack.angle;
 
 			self.draw = function(){
-				var x = self.x - Player.list[selfId].x + getDrawPosition('x');
-				var y = self.y - Player.list[selfId].y + getDrawPosition('y');
+				var originX = self.x - Player.list[selfId].x + getDrawPosition('x');
+				var originY = self.y - Player.list[selfId].y + getDrawPosition('y');
+
+				x = originX + playerDiameter * Math.cos(self.angle * Math.PI / 180);
+				y = originY + playerDiameter * Math.sin(self.angle * Math.PI / 180);
 
 				drawCircle(x, y, bulletDiameter);
 				ctx.fillStyle = '#484848';
@@ -143,6 +147,9 @@
 					}
 					if(pack.y !== undefined){
 						b.y = pack.y;
+					}
+					if(pack.angle !== undefined){
+						b.angle = pack.angle;
 					}
 				}
 			}
@@ -292,7 +299,7 @@
 			
 			var mouseAngle = Math.atan2(getDrawPosition('y') - event.y, getDrawPosition('x') - event.x) * 180 / Math.PI + 180;
 
-			console.log("Angle: " + mouseAngle);
+			//console.log("Angle: " + mouseAngle);
 
 			socket.emit('keyPress', {inputId:'mouseAngle', state:mouseAngle});
 		}
