@@ -34,25 +34,7 @@ var Entity = function(param){
 		self.updatePosition();
 	}
 	self.updatePosition = function(){
-		if(self.affectedByBoundaries){
-			if(self.x < 0){
-				self.x = 0;
-			}
-			else if(self.x > 800){
-				self.x = 800;
-			}
-			else if(self.y < 0){
-				self.y = 0;
-			}
-			else if(self.y > 800){
-				self.y = 800;
-			}
-			else{
-				self.x += self.spdX;
-				self.y += self.spdY;
-			}
-		}
-		else{
+		if(!self.affectedByBoundaries){
 			self.x += self.spdX;
 			self.y += self.spdY;
 		}
@@ -73,6 +55,8 @@ var Player = function(param){
 	self.pressingDown = false;
 	self.pressingAttack = false;
 	self.mouseAngle = 0;
+	self.windowWidth = 0;
+	self.windowHeight = 0;
 	self.maxSpd = 10;
 	self.affectedByBoundaries = true;
 	self.hp = 10;
@@ -110,6 +94,30 @@ var Player = function(param){
 			self.spdY = self.maxSpd;
 		else
 			self.spdY = 0;
+	}
+
+	self.updatePosition = function(){
+		if(self.affectedByBoundaries){
+			var limitX = 800;
+			var limitY = 800;
+
+			if(self.x < 0){
+				self.x = 0;
+			}
+			else if(self.x > limitX){
+				self.x = limitX;
+			}
+			else if(self.y < 0){
+				self.y = 0;
+			}
+			else if(self.y > limitY){
+				self.y = limitY;
+			}
+			else{
+				self.x += self.spdX;
+				self.y += self.spdY;
+			}
+		}
 	}
 
 	self.getInitPack = function(){
@@ -158,6 +166,11 @@ Player.onConnect = function(socket){
 			player.pressingAttack = data.state;
 		else if(data.inputId === 'mouseAngle')
 			player.mouseAngle = data.state;
+	});
+	socket.on('resize', function(data){
+		player.windowWidth = data.windowWidth;
+		player.windowHeight = data.windowHeight;
+		console.log('Player window height: ' + data.windowHeight + ' Player window width: ' + data.windowWidth);
 	});
 
 	socket.emit('init', {

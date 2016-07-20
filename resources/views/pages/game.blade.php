@@ -12,8 +12,8 @@
 	<script>
 		//Game Environment
 		var DEBUG = true;
-		var GAME_ARENA_WIDTH = 800;
-		var GAME_ARENA_HEIGHT = 800;
+		var gameArenaWidth = 800;
+		var gameArenaHeight = 800;
 		var gamePageWidth = getWindowWidth();
 		var gamePageHeight = getWindowHeight();
 		var playerDiameter = getPlayerDiameter();
@@ -58,16 +58,16 @@
 				var y = self.y - Player.list[selfId].y + getDrawPosition('y');
 				
 				//HP Bar
-				var hpWidth = gamePageWidth * 0.04 * self.hp / self.hpMax;
+				var hpWidth = self.hp / self.hpMax;
 				ctx.fillStyle = 'red';
-				ctx.fillRect(x - hpWidth/1.96, y + gamePageWidth * 0.022, hpWidth, gamePageHeight * 0.003);
+				ctx.fillRect(x - hpWidth/1.96, y, hpWidth, 4);
 
 				//Player Ball
 				drawCircle(x, y, playerDiameter);
 				ctx.fillStyle = (self.id == selfId) ? '#0099ff' : '#ff1a1a';
 				ctx.fill();
 
-				ctx.lineWidth = gamePageHeight * 0.005;
+				ctx.lineWidth = 5;
 				ctx.strokeStyle = (self.id == selfId) ? '#005c99' : '#990000';
       			ctx.stroke();
 			}
@@ -95,7 +95,7 @@
 				drawCircle(x, y, bulletDiameter);
 				ctx.fillStyle = '#484848';
 				ctx.fill();
-				ctx.lineWidth = gamePageHeight * 0.005;
+				ctx.lineWidth = 3;
 				ctx.strokeStyle = '#000000';
       			ctx.stroke();
 			}
@@ -188,8 +188,8 @@
 		var drawMap = function(){
 			var originX = xDrawPosition - Player.list[selfId].x;
 			var originY = yDrawPosition - Player.list[selfId].y;
-			var limitXPosition = GAME_ARENA_WIDTH - Player.list[selfId].x + xDrawPosition;
-			var limitYPosition = GAME_ARENA_HEIGHT - Player.list[selfId].y + yDrawPosition;
+			var limitXPosition = gameArenaWidth - Player.list[selfId].x + xDrawPosition;
+			var limitYPosition = gameArenaHeight - Player.list[selfId].y + yDrawPosition;
 
 			ctx.lineWidth = 1;
 			ctx.strokeStyle = 'black';
@@ -231,11 +231,11 @@
 		}
 
 		function getPlayerDiameter(){
-			return gamePageWidth * 0.02;
+			return 40;
 		}
 
 		function getBulletDiameter(){
-			return playerDiameter / 4;
+			return 10;
 		}
 
 		function getWindowWidth(){
@@ -244,6 +244,14 @@
 
 		function getWindowHeight(){
 			return window.innerHeight - 51; //-51px for navbar -1px for navbar border
+		}
+
+		function getGameArenaWidth(){
+			return getWindowWidth()*0.3;
+		}
+
+		function getGameArenaHeight(){
+			return getWindowHeight()*0.5;
 		}
 
 		function getDrawPosition(axis){
@@ -264,6 +272,7 @@
   			yDrawPosition = getDrawPosition('y');
   			playerDiameter = getPlayerDiameter();
   		 	bulletDiameter = getBulletDiameter();
+  		 	socket.emit('resize', {windowWidth:getWindowWidth(), windowHeight:getWindowHeight()});
 		}
 
 		document.onkeydown = function(event){
