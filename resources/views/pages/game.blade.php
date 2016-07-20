@@ -58,9 +58,9 @@
 				var y = self.y - Player.list[selfId].y + getDrawPosition('y');
 				
 				//HP Bar
-				var hpWidth = self.hp / self.hpMax;
+				var hpWidth = self.hp / self.hpMax * 80;
 				ctx.fillStyle = 'red';
-				ctx.fillRect(x - hpWidth/1.96, y, hpWidth, 4);
+				ctx.fillRect(x - (hpWidth / 2), y+45, hpWidth, 5);
 
 				//Player Ball
 				drawCircle(x, y, playerDiameter);
@@ -95,7 +95,7 @@
 				drawCircle(x, y, bulletDiameter);
 				ctx.fillStyle = '#484848';
 				ctx.fill();
-				ctx.lineWidth = 3;
+				ctx.lineWidth = 4;
 				ctx.strokeStyle = '#000000';
       			ctx.stroke();
 			}
@@ -248,13 +248,24 @@
 		}
 
 		function resizeCanvas(){
-			gamePageWidth = getWindowWidth();
-			gamePageHeight = getWindowHeight();
+			var aspectRatio = gamePageWidth/gamePageHeight;
+
+			var newGamePageWidth = getWindowWidth();
+			var newGamePageHeight = getWindowHeight();
+
+			var widthScaleFactor = newGamePageWidth/gamePageWidth; //New Width / Old Width
+			var heightScaleFactor = newGamePageHeight/gamePageHeight; //New Height / Old Height
+
+			ctx.scale(widthScaleFactor, heightScaleFactor);
+
+			gamePageWidth = newGamePageWidth;
+			gamePageHeight = newGamePageHeight;
+
 			ctx.canvas.width = gamePageWidth;
 			ctx.canvas.height = gamePageHeight;
+
 			xDrawPosition = getDrawPosition('x');
   			yDrawPosition = getDrawPosition('y');
-  		 	socket.emit('resize', {windowWidth:getWindowWidth(), windowHeight:getWindowHeight()});
 		}
 
 		document.onkeydown = function(event){
