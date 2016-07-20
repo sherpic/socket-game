@@ -167,11 +167,6 @@ Player.onConnect = function(socket){
 		else if(data.inputId === 'mouseAngle')
 			player.mouseAngle = data.state;
 	});
-	socket.on('resize', function(data){
-		player.windowWidth = data.windowWidth;
-		player.windowHeight = data.windowHeight;
-		console.log('Player window height: ' + data.windowHeight + ' Player window width: ' + data.windowWidth);
-	});
 
 	socket.emit('init', {
 		selfId:socket.id,
