@@ -12,8 +12,8 @@
 	<script>
 		//Game Environment
 		var DEBUG = true;
-		var GAME_ARENA_WIDTH = 800;
-		var GAME_ARENA_HEIGHT = 800;
+		var GAME_ARENA_WIDTH = 1000;
+		var GAME_ARENA_HEIGHT = 1000;
 		var gamePageWidth = getWindowWidth();
 		var gamePageHeight = getWindowHeight();
 		var playerDiameter = 40;

@@ -10,6 +10,9 @@ var io = socket.listen(serv);
 var SOCKET_LIST = {};
 var PORT = 8001;
 
+var GAME_WIDTH = 1000;
+var GAME_HEIGHT = 1000;
+
 serv.listen(PORT);
 console.log("Server started.");
 
@@ -98,26 +101,29 @@ var Player = function(param){
 
 	self.updatePosition = function(){
 		if(self.affectedByBoundaries){
-			var limitX = 800;
-			var limitY = 800;
-
 			if(self.x < 0){
 				self.x = 0;
 			}
-			else if(self.x > limitX){
-				self.x = limitX;
+			else if(self.x > GAME_WIDTH){
+				self.x = GAME_WIDTH;
 			}
 			else if(self.y < 0){
 				self.y = 0;
 			}
-			else if(self.y > limitY){
-				self.y = limitY;
+			else if(self.y > GAME_HEIGHT){
+				self.y = GAME_HEIGHT;
 			}
 			else{
 				self.x += self.spdX;
 				self.y += self.spdY;
 			}
 		}
+	}
+
+	self.respawn = function(){
+		self.hp = self.hpMax;
+		self.x = Math.random() * GAME_WIDTH;
+		self.y = Math.random() * GAME_HEIGHT;
 	}
 
 	self.getInitPack = function(){
@@ -222,9 +228,7 @@ var Bullet = function(param){
 					var shooter = Player.list[self.parent];
 					if(shooter)
 						shooter.score += 1;
-					p.hp = p.hpMax;
-					p.x = Math.random() * 500;
-					p.y = Math.random() * 500;
+					p.respawn();
 				}
 				self.toRemove = true;
 			}
