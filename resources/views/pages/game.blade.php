@@ -12,8 +12,11 @@
 	<script>
 		//Game Environment
 		var DEBUG = true;
+		var OPTIMAL_GAME_PAGE_WIDTH = 2400;
+		var OPTIMAL_GAME_PAGE_HEIGHT = 1156;
 		var GAME_ARENA_WIDTH = 800;
 		var GAME_ARENA_HEIGHT = 800;
+		var onInitialLoad = true;
 		var gamePageWidth = getWindowWidth();
 		var gamePageHeight = getWindowHeight();
 		var playerDiameter = 40;
@@ -168,7 +171,7 @@
 			if(!selfId)
 				return;
 
-			ctx.clearRect(0,0,gamePageWidth,gamePageHeight);
+			ctx.clearRect(0,0,10000,10000);
 			drawMap();
 
 			if(DEBUG){
@@ -240,32 +243,50 @@
 
 		function getDrawPosition(axis){
 			if(axis == 'x'){
-				return gamePageWidth/2;
+				return getWindowWidth()/2;
 			}
 			else if(axis == 'y'){
-				return gamePageHeight/2;
+				return getWindowHeight()/2;
 			}
 		}
 
 		function resizeCanvas(){
-			var aspectRatio = gamePageWidth/gamePageHeight;
+			console.log("Resize Event Detected!");
 
 			var newGamePageWidth = getWindowWidth();
 			var newGamePageHeight = getWindowHeight();
 
-			var widthScaleFactor = newGamePageWidth/gamePageWidth; //New Width / Old Width
-			var heightScaleFactor = newGamePageHeight/gamePageHeight; //New Height / Old Height
+			if(onInitialLoad){
+				console.log("Inital Load");
+				var widthScaleFactor = newGamePageWidth/OPTIMAL_GAME_PAGE_WIDTH; //New Width / Optimal Width
+				var heightScaleFactor = newGamePageHeight/OPTIMAL_GAME_PAGE_HEIGHT; //New Height / Optimal Height
+			}
+			else{
+				var widthScaleFactor = newGamePageWidth/gamePageWidth; //New Width / Old Width
+				var heightScaleFactor = newGamePageHeight/gamePageHeight; //New Height / Old Height
+			}
 
-			ctx.scale(widthScaleFactor, heightScaleFactor);
+			var aspectRatio = gamePageWidth/gamePageHeight;
+
+			console.log("Old Game Page Width: "+gamePageWidth + "  Old Game Page Height: " + gamePageHeight);	
+
+			if(ctx.canvas.width < newGamePageWidth){
+				ctx.canvas.width = newGamePageWidth;
+			}
+			else if(ctx.canvas.height < newGamePageHeight){
+				ctx.canvas.height = newGamePageHeight;
+			}
+
+  			ctx.scale(widthScaleFactor, heightScaleFactor);
+			console.log("Scaled Width: "+widthScaleFactor + "Height: " + heightScaleFactor);
 
 			gamePageWidth = newGamePageWidth;
 			gamePageHeight = newGamePageHeight;
-
-			ctx.canvas.width = gamePageWidth;
-			ctx.canvas.height = gamePageHeight;
+			console.log("New Game Page Width: "+gamePageWidth + "  New Game Page Height: " + gamePageHeight);	
 
 			xDrawPosition = getDrawPosition('x');
   			yDrawPosition = getDrawPosition('y');
+  			console.log("Window Width: " + getWindowWidth() + "  Window Height: " + getWindowHeight());
 		}
 
 		document.onkeydown = function(event){
@@ -277,6 +298,10 @@
 				socket.emit('keyPress',{inputId: 'left', state: true});
 			if(event.keyCode == 87) //w
 				socket.emit('keyPress',{inputId: 'up', state: true});
+			if(event.keyCode == 67) //c
+				ctx.scale(0.5, 0.5);
+			if(event.keyCode == 86) //v
+				ctx.scale(2, 2);
 		}
 		document.onkeyup = function(event){
 			if(event.keyCode == 68) //d
@@ -305,7 +330,10 @@
 
 			socket.emit('keyPress', {inputId:'mouseAngle', state:mouseAngle});
 		}
-
+		window.onload = function(){
+			resizeCanvas();
+			onInitialLoad = false;
+		};
 		//Chat (Disabled until needed again)
 		/*socket.on('addToChat', function(data){
 			chatText.innerHTML += '<div>' + data + '</div>';
