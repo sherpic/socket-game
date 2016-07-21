@@ -57,7 +57,7 @@
 			self.draw = function(){
 				var x = self.x - Player.list[selfId].x + getDrawPosition('x');
 				var y = self.y - Player.list[selfId].y + getDrawPosition('y');
-				
+
 				//HP Bar
 				var hpWidth = self.hp / self.hpMax * 80;
 				ctx.fillStyle = 'red';
@@ -300,13 +300,7 @@
 			socket.emit('keyPress', {inputId:'attack', state:false});
 		}
 		document.onmousemove = function(event){
-			/*console.log("Mouse X: " + event.x + "  Mouse Y: " + event.y);
-			console.log("Playr X: " + Player.list[selfId].x + "  Playr Y: " + Player.list[selfId].y);*/
-			
-			var mouseAngle = Math.atan2(getDrawPosition('y') - event.y, getDrawPosition('x') - event.x) * 180 / Math.PI + 180;
-
-			//console.log("Angle: " + mouseAngle);
-
+			var mouseAngle = Math.atan2(getDrawPosition('y') - event.y + 80, getDrawPosition('x') - event.x) * 180 / Math.PI + 180;
 			socket.emit('keyPress', {inputId:'mouseAngle', state:mouseAngle});
 		}
 
