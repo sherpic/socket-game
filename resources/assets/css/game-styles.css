@@ -3,7 +3,6 @@ html, body {
 	height: 100%;
 	margin: 0px;
 	border: 0;
-	padding: 0;
 	overflow: hidden; /*  Disable scrollbars */
 	display: block;  /* No floating content on sides */
 }
@@ -22,6 +21,8 @@ canvas{
 #ctx{
 	margin: 0; 
 	padding: 0;
+	width:100%;
+	height:100%;
 	position:absolute;
 }
 
