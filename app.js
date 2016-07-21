@@ -10,6 +10,7 @@ var io = socket.listen(serv);
 var SOCKET_LIST = {};
 var PORT = 8001;
 
+var DEBUG = true;
 var GAME_WIDTH = 1000;
 var GAME_HEIGHT = 1000;
 
@@ -85,16 +86,16 @@ var Player = function(param){
 	}
 
 	self.updateSpd = function(){
-		if(self.pressingRight)
+		if(self.pressingRight && self.x < GAME_WIDTH-20)
 			self.spdX = self.maxSpd;
-		else if(self.pressingLeft)
+		else if(self.pressingLeft && self.x > 20)
 			self.spdX = -self.maxSpd;
 		else
 			self.spdX = 0;
 
-		if(self.pressingUp)
+		if(self.pressingUp && self.y > 20)
 			self.spdY = -self.maxSpd;
-		else if(self.pressingDown)
+		else if(self.pressingDown && self.y < GAME_HEIGHT-20)
 			self.spdY = self.maxSpd;
 		else
 			self.spdY = 0;
@@ -102,17 +103,17 @@ var Player = function(param){
 
 	self.updatePosition = function(){
 		if(self.affectedByBoundaries){
-			if(self.x < 0){
-				self.x = 0;
+			if(self.x < 20){
+				self.x = 20;
 			}
-			else if(self.x > GAME_WIDTH){
-				self.x = GAME_WIDTH;
+			else if(self.x > GAME_WIDTH-20){
+				self.x = GAME_WIDTH-20;
 			}
-			else if(self.y < 0){
-				self.y = 0;
+			else if(self.y < 20){
+				self.y = 20;
 			}
-			else if(self.y > GAME_HEIGHT){
-				self.y = GAME_HEIGHT;
+			else if(self.y > GAME_HEIGHT-20){
+				self.y = GAME_HEIGHT-20;
 			}
 			else{
 				self.x += self.spdX;
@@ -288,8 +289,6 @@ Bullet.getAllInitPack = function(){
 		bullets.push(Bullet.list[i].getInitPack());
 	return bullets;
 }
-
-var DEBUG = true;
 
 io.sockets.on('connection', function(socket){
 	socket.id = Math.random();
