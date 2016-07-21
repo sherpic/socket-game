@@ -64,7 +64,8 @@ var Player = function(param){
 	self.affectedByBoundaries = true;
 	self.hp = 10;
 	self.hpMax = 10;
-	self.score = 0;
+	self.kills = 0;
+	self.deaths = 0;
 
 	var super_update = self.update;
 	self.update = function(){
@@ -126,6 +127,14 @@ var Player = function(param){
 		self.y = Math.random() * GAME_HEIGHT;
 	}
 
+	self.recordKill = function(){
+		self.kills += 1;
+	}
+
+	self.recordDeath = function(){
+		self.deaths += 1;
+	}
+
 	self.getInitPack = function(){
 		return {
 			id: self.id,
@@ -135,7 +144,8 @@ var Player = function(param){
 			number: self.number,
 			hp:self.hp,
 			hpMax:self.hpMax,
-			score:self.score,
+			kills:self.kills,
+			deaths:self.deaths,
 		};
 	}
 	self.getUpdatePack = function(){
@@ -145,7 +155,8 @@ var Player = function(param){
 			y: self.y,
 			mouseAngle: self.mouseAngle,
 			hp:self.hp,
-			score:self.score,
+			kills:self.kills,
+			deaths:self.deaths,
 			hpMax:self.hpMax,
 		};
 	}
@@ -227,7 +238,8 @@ var Bullet = function(param){
 				if(p.hp <= 0){
 					var shooter = Player.list[self.parent];
 					if(shooter)
-						shooter.score += 1;
+						shooter.recordKill();
+					p.recordDeath();
 					p.respawn();
 				}
 				self.toRemove = true;

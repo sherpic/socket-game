@@ -51,7 +51,8 @@
 			self.mouseAngle = initPack.mouseAngle;
 			self.hp = initPack.hp;
 			self.hpMax = initPack.hpMax;
-			self.score = initPack.score;
+			self.kills = initPack.kills;
+			self.deaths = initPack.deaths;
 
 			self.draw = function(){
 				var x = self.x - Player.list[selfId].x + getDrawPosition('x');
@@ -130,8 +131,11 @@
 					if(pack.hp !== undefined){
 						p.hp = pack.hp;
 					}
-					if(pack.score !== undefined){
-						p.score = pack.score;
+					if(pack.kills !== undefined){
+						p.kills = pack.kills;
+					}
+					if(pack.deaths !== undefined){
+						p.deaths = pack.deaths;
 					}
 					if(pack.mouseAngle !== undefined){
 						p.mouseAngle = pack.mouseAngle;
@@ -201,14 +205,14 @@
 		}
 
 		var drawScore = function(){
-			ctx.fillText("Score: " + Player.list[selfId].score, 0, 15);
+			ctx.fillText("Kills: " + Player.list[selfId].kills + " Deaths: " + Player.list[selfId].deaths, 0, 15);
 		}
 
 		var drawDebugVariables = function(){
 			ctx.fillStyle = 'red';
 			var playerData = Player.list[selfId];
 			ctx.fillText("Debug", 0, 15);
-			ctx.fillText("Score: " + Player.list[selfId].score, 0, 30);
+			ctx.fillText("Kills: " + Player.list[selfId].kills + " Deaths: " + Player.list[selfId].deaths, 0, 30);
 			ctx.fillText("ID: " + playerData.number, 0, 45);
 			ctx.fillText("X: " + playerData.x, 0, 60);
 			ctx.fillText("Y: " + playerData.y, 0, 75);
