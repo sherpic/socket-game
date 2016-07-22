@@ -273,14 +273,34 @@
 		}
 
 		document.onkeydown = function(event){
+			var movingLeft = false;
+			var movingRight = false;
+			var movingUp = false;
+			var movingDown = false;
+
+			var movingLeftTimer;
+			var movingRightTimer;
+			var movingUpTimer;
+			var movingDownTimer;
+
 			if(event.keyCode == 68) //d
 				socket.emit('keyPress',{inputId: 'right', state: true});
+				if(movingRight){
+					clearTimeout(movingRightTimer);
+					movingRightTimer = setTimeOut(moveRight, 40);
+				}
+				else{
+
+				}
 			if(event.keyCode == 83) //s
 				socket.emit('keyPress',{inputId: 'down', state: true});
+				movingDown = true;
 			if(event.keyCode == 65) //a
 				socket.emit('keyPress',{inputId: 'left', state: true});
+				movingLeft = true;
 			if(event.keyCode == 87) //w
 				socket.emit('keyPress',{inputId: 'up', state: true});
+				movingUp = true;
 		}
 		document.onkeyup = function(event){
 			if(event.keyCode == 68) //d

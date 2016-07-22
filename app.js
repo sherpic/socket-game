@@ -86,10 +86,10 @@ var Player = function(param){
 	}
 
 	self.updateSpd = function(){
-		if(self.pressingRight && self.x < GAME_WIDTH-20)
-			self.spdX = self.maxSpd;
-		else if(self.pressingLeft && self.x > 20)
+		if(self.pressingLeft && self.x > 20)
 			self.spdX = -self.maxSpd;
+		else if(self.pressingRight && self.x < GAME_WIDTH-20)
+			self.spdX = self.maxSpd;
 		else
 			self.spdX = 0;
 
@@ -102,24 +102,8 @@ var Player = function(param){
 	}
 
 	self.updatePosition = function(){
-		if(self.affectedByBoundaries){
-			if(self.x < 20){
-				self.x = 20;
-			}
-			else if(self.x > GAME_WIDTH-20){
-				self.x = GAME_WIDTH-20;
-			}
-			else if(self.y < 20){
-				self.y = 20;
-			}
-			else if(self.y > GAME_HEIGHT-20){
-				self.y = GAME_HEIGHT-20;
-			}
-			else{
-				self.x += self.spdX;
-				self.y += self.spdY;
-			}
-		}
+		self.x += self.spdX;
+		self.y += self.spdY;
 	}
 
 	self.respawn = function(){
