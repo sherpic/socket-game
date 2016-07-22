@@ -88,25 +88,24 @@ var Player = function(param){
 	self.updateSpd = function(){
 		if(self.pressingLeft && self.x > 20 && !self.pressingDown && !self.pressingUp){
 			self.spdX = -self.maxSpd;
+			self.spdY = 0;
 		}
 		else if(self.pressingRight && self.x < GAME_WIDTH-20 && !self.pressingDown && !self.pressingUp){
 			self.spdX = self.maxSpd;
+			self.spdY = 0;
 		}
 		else if(self.pressingUp && self.y > 20 && !self.pressingLeft && !self.pressingRight){
 			self.spdY = -self.maxSpd;
+			self.spdX = 0;
 		}
 		else if(self.pressingDown && self.y < GAME_HEIGHT-20 && !self.pressingLeft && !self.pressingRight){
 			self.spdY = self.maxSpd;
+			self.spdX = 0;
 		}
 		else if(self.pressingLeft && self.x > 20 && self.pressingUp && self.y > 20){
 			self.spdX = (0.71*-self.maxSpd);
 			self.spdY = (0.71*-self.maxSpd);
 		}
-		else if(self.pressingRight && self.x < GAME_WIDTH-20 && self.pressingDown && self.y < GAME_HEIGHT-20){
-			self.spdX = (0.71*self.maxSpd);
-			self.spdY = (0.71*self.maxSpd);
-		}
-
 		else if(self.pressingLeft && self.x > 20 && self.pressingDown && self.y < GAME_HEIGHT-20){
 			self.spdX = (0.71*-self.maxSpd);
 			self.spdY = (0.71*self.maxSpd);
@@ -114,6 +113,10 @@ var Player = function(param){
 		else if(self.pressingRight && self.x < GAME_WIDTH-20 && self.pressingUp && self.y > 20){
 			self.spdX = (0.71*self.maxSpd);
 			self.spdY = (0.71*-self.maxSpd);
+		}
+		else if(self.pressingRight && self.x < GAME_WIDTH-20 && self.pressingDown && self.y < GAME_HEIGHT-20){
+			self.spdX = (0.71*self.maxSpd);
+			self.spdY = (0.71*self.maxSpd);
 		}
 		else{
 			self.spdY = 0;
@@ -245,7 +248,7 @@ var Bullet = function(param){
 
 		for(var i in Player.list){
 			var p = Player.list[i];
-			if(self.getDistance(p) < 40 && self.parent !== p.id){
+			if(self.getDistance(p) < 45 && self.parent !== p.id){
 				p.hp -= 1;
 				if(p.hp <= 0){
 					var shooter = Player.list[self.parent];
