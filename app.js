@@ -86,19 +86,47 @@ var Player = function(param){
 	}
 
 	self.updateSpd = function(){
-		if(self.pressingLeft && self.x > 20)
+		if(self.pressingLeft && self.x > 20 && !self.pressingDown && !self.pressingUp){
 			self.spdX = -self.maxSpd;
-		else if(self.pressingRight && self.x < GAME_WIDTH-20)
+		}
+		else if(self.pressingRight && self.x < GAME_WIDTH-20 && !self.pressingDown && !self.pressingUp){
 			self.spdX = self.maxSpd;
-		else
+		}
+		/*else{
 			self.spdX = 0;
+		}*/
 
-		if(self.pressingUp && self.y > 20)
+		else if(self.pressingUp && self.y > 20 && !self.pressingLeft && !self.pressingRight){
 			self.spdY = -self.maxSpd;
-		else if(self.pressingDown && self.y < GAME_HEIGHT-20)
+		}
+		else if(self.pressingDown && self.y < GAME_HEIGHT-20 && !self.pressingLeft && !self.pressingRight){
 			self.spdY = self.maxSpd;
-		else
+		}
+		/*else{
 			self.spdY = 0;
+		}*/
+			
+		else if(self.pressingLeft && self.x > 20 && self.pressingUp && self.y > 20){
+			self.spdX = (0.71*-self.maxSpd);
+			self.spdY = (0.71*-self.maxSpd);
+		}
+		else if(self.pressingRight && self.x < GAME_WIDTH-20 && self.pressingDown && self.y < GAME_HEIGHT-20){
+			self.spdX = (0.71*self.maxSpd);
+			self.spdY = (0.71*self.maxSpd);
+		}
+
+		else if(self.pressingLeft && self.x > 20 && self.pressingDown && self.y < GAME_HEIGHT-20){
+			self.spdX = (0.71*-self.maxSpd);
+			self.spdY = (0.71*self.maxSpd);
+		}
+		else if(self.pressingRight && self.x < GAME_WIDTH-20 && self.pressingUp && self.y > 20){
+			self.spdX = (0.71*self.maxSpd);
+			self.spdY = (0.71*-self.maxSpd);
+		}
+		else{
+			self.spdY = 0;
+			self.spdX = 0;
+		}
 	}
 
 	self.updatePosition = function(){
