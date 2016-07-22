@@ -195,13 +195,25 @@
 			var limitXPosition = GAME_ARENA_WIDTH - Player.list[selfId].x + xDrawPosition;
 			var limitYPosition = GAME_ARENA_HEIGHT - Player.list[selfId].y + yDrawPosition;
 
-			ctx.lineWidth = 1;
+			ctx.lineWidth = 3;
 			ctx.strokeStyle = 'black';
+			ctx.fillStyle = '#efeff5';
 
+			ctx.fillRect(originX,originY, GAME_ARENA_WIDTH, GAME_ARENA_HEIGHT);
 			drawLine(originX, originY, limitXPosition, originY); //Top Horizontal
 			drawLine(originX, originY, originX, limitYPosition); //Left Vertical
 			drawLine(limitXPosition, originY, limitXPosition, limitYPosition); //Right Verticel
 			drawLine(originX, limitYPosition, limitXPosition, limitYPosition); //Bottom Horizontal
+
+			ctx.lineWidth = 1;
+			ctx.strokeStyle = '#a1a1c4';
+			//Horizontal Loop
+			for(i = 0; i < GAME_ARENA_WIDTH; i+= 40){
+				drawLine(originX, originY + i, limitXPosition, originY + i);
+			}
+			for(i = 0; i < GAME_ARENA_WIDTH; i+= 40){
+				drawLine(originX + i, originY, originX + i, limitYPosition);
+			}
 		}
 
 		var drawScore = function(){
