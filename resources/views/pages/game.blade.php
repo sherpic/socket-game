@@ -82,8 +82,30 @@
 				outerX = originX + (playerDiameter + 50) * Math.cos(self.mouseAngle * Math.PI / 180);
 				outerY = originY + (playerDiameter + 50) * Math.sin(self.mouseAngle * Math.PI / 180);
 
+				innerX1 = innerX + (playerDiameter - 30) * Math.cos((self.mouseAngle + 90) * Math.PI / 180);
+				innerY1 = innerY + (playerDiameter - 30) * Math.sin((self.mouseAngle + 90) * Math.PI / 180);
+
+				outerX1 = outerX + 10 * Math.cos((self.mouseAngle + 90) * Math.PI / 180);
+				outerY1 = outerY + 10 * Math.sin((self.mouseAngle + 90) * Math.PI / 180);
+
+				innerX2 = innerX + (playerDiameter - 30) * Math.cos((self.mouseAngle - 90) * Math.PI / 180);
+				innerY2 = innerY + (playerDiameter - 30) * Math.sin((self.mouseAngle - 90) * Math.PI / 180);
+
+				outerX2 = outerX + 10 * Math.cos((self.mouseAngle - 90) * Math.PI / 180);
+				outerY2 = outerY + 10 * Math.sin((self.mouseAngle - 90) * Math.PI / 180);
+
+				ctx.lineWidth = 2;
 				ctx.strokeStyle = 'black';
-				drawLine(innerX, innerY, outerX, outerY);
+				//drawLine(innerX, innerY, outerX, outerY);
+
+				drawLine(innerX1, innerY1, outerX1, outerY1);
+				drawLine(innerX2, innerY2, outerX2, outerY2);
+				drawLine(innerX1, innerY1, innerX2, innerY2);
+				drawLine(outerX1, outerY1, outerX2, outerY2);
+/*				ctx.fillStyle = 'red';
+				ctx.fillRect(innerX1, innerY1, 5, 5);
+
+				ctx.fillRect(outerX1, outerY1, 5, 5);*/
 			}
 
 			Player.list[self.id] = self;
