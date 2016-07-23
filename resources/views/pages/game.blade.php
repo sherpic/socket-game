@@ -54,7 +54,7 @@
 			self.kills = initPack.kills;
 			self.deaths = initPack.deaths;
 
-			self.draw = function(){
+			self.drawBody = function(){
 				var x = self.x - Player.list[selfId].x + getDrawPosition('x');
 				var y = self.y - Player.list[selfId].y + getDrawPosition('y');
 
@@ -68,9 +68,19 @@
 				ctx.fillStyle = (self.id == selfId) ? '#0099ff' : '#ff1a1a';
 				ctx.fill();
 
-				ctx.lineWidth = 5;
+				ctx.lineWidth = 4;
 				ctx.strokeStyle = (self.id == selfId) ? '#005c99' : '#990000';
       			ctx.stroke();
+			}
+			self.drawGun = function(){
+				/*var originX = getDrawPosition('x');
+				var originY = getDrawPosition('y');
+
+				x = originX + (playerDiameter) * Math.cos(self.mouseAngle * Math.PI / 180);
+				y = originY + (playerDiameter) * Math.sin(self.mouseAngle * Math.PI / 180);
+
+				ctx.fillStyle = 'red';
+				ctx.fillRect(x, y, 100, 5);*/
 			}
 
 			Player.list[self.id] = self;
@@ -90,8 +100,8 @@
 				var originX = self.x - Player.list[selfId].x + getDrawPosition('x');
 				var originY = self.y - Player.list[selfId].y + getDrawPosition('y');
 
-				x = originX + playerDiameter * Math.cos(self.angle * Math.PI / 180);
-				y = originY + playerDiameter * Math.sin(self.angle * Math.PI / 180);
+				x = originX + (1 + playerDiameter) * Math.cos(self.angle * Math.PI / 180);
+				y = originY + (1 + playerDiameter) * Math.sin(self.angle * Math.PI / 180);
 
 				drawCircle(x, y, bulletDiameter);
 				ctx.fillStyle = '#484848';
@@ -182,7 +192,8 @@
 			}
 
 			for(var i in Player.list){
-				Player.list[i].draw();
+				Player.list[i].drawBody();
+				Player.list[i].drawGun();
 			}
 			for(var i in Bullet.list){
 				Bullet.list[i].draw();
