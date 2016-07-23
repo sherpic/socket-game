@@ -73,14 +73,17 @@
       			ctx.stroke();
 			}
 			self.drawGun = function(){
-				/*var originX = getDrawPosition('x');
+				var originX = getDrawPosition('x');
 				var originY = getDrawPosition('y');
 
-				x = originX + (playerDiameter) * Math.cos(self.mouseAngle * Math.PI / 180);
-				y = originY + (playerDiameter) * Math.sin(self.mouseAngle * Math.PI / 180);
+				innerX = originX + (playerDiameter - 20) * Math.cos(self.mouseAngle * Math.PI / 180);
+				innerY = originY + (playerDiameter - 20) * Math.sin(self.mouseAngle * Math.PI / 180);
 
-				ctx.fillStyle = 'red';
-				ctx.fillRect(x, y, 100, 5);*/
+				outerX = originX + (playerDiameter + 50) * Math.cos(self.mouseAngle * Math.PI / 180);
+				outerY = originY + (playerDiameter + 50) * Math.sin(self.mouseAngle * Math.PI / 180);
+
+				ctx.strokeStyle = 'black';
+				drawLine(innerX, innerY, outerX, outerY);
 			}
 
 			Player.list[self.id] = self;
@@ -100,8 +103,8 @@
 				var originX = self.x - Player.list[selfId].x + getDrawPosition('x');
 				var originY = self.y - Player.list[selfId].y + getDrawPosition('y');
 
-				x = originX + (1 + playerDiameter) * Math.cos(self.angle * Math.PI / 180);
-				y = originY + (1 + playerDiameter) * Math.sin(self.angle * Math.PI / 180);
+				x = originX + (playerDiameter + 50) * Math.cos(self.angle * Math.PI / 180);
+				y = originY + (playerDiameter + 50) * Math.sin(self.angle * Math.PI / 180);
 
 				drawCircle(x, y, bulletDiameter);
 				ctx.fillStyle = '#484848';
