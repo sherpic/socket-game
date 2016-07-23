@@ -74,7 +74,7 @@
 			}
 			self.drawGun = function(){
 				var originX = self.x - Player.list[selfId].x + getDrawPosition('x');
-				var originY = self.y - Player.list[selfId].y + dwwawdgetDrawPosition('y');
+				var originY = self.y - Player.list[selfId].y + getDrawPosition('y');
 
 				innerX = originX + (playerDiameter - 20) * Math.cos(self.mouseAngle * Math.PI / 180);
 				innerY = originY + (playerDiameter - 20) * Math.sin(self.mouseAngle * Math.PI / 180);
