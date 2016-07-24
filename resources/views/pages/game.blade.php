@@ -73,39 +73,8 @@
       			ctx.stroke();
 			}
 			self.drawGun = function(){
-				var originX = self.x - Player.list[selfId].x + getDrawPosition('x');
-				var originY = self.y - Player.list[selfId].y + getDrawPosition('y');
-
-				innerX = originX + (playerDiameter - 20) * Math.cos(self.mouseAngle * Math.PI / 180);
-				innerY = originY + (playerDiameter - 20) * Math.sin(self.mouseAngle * Math.PI / 180);
-
-				outerX = originX + (playerDiameter + 50) * Math.cos(self.mouseAngle * Math.PI / 180);
-				outerY = originY + (playerDiameter + 50) * Math.sin(self.mouseAngle * Math.PI / 180);
-
-				innerX1 = innerX + (playerDiameter - 30) * Math.cos((self.mouseAngle + 90) * Math.PI / 180);
-				innerY1 = innerY + (playerDiameter - 30) * Math.sin((self.mouseAngle + 90) * Math.PI / 180);
-
-				outerX1 = outerX + 10 * Math.cos((self.mouseAngle + 90) * Math.PI / 180);
-				outerY1 = outerY + 10 * Math.sin((self.mouseAngle + 90) * Math.PI / 180);
-
-				innerX2 = innerX + (playerDiameter - 30) * Math.cos((self.mouseAngle - 90) * Math.PI / 180);
-				innerY2 = innerY + (playerDiameter - 30) * Math.sin((self.mouseAngle - 90) * Math.PI / 180);
-
-				outerX2 = outerX + 10 * Math.cos((self.mouseAngle - 90) * Math.PI / 180);
-				outerY2 = outerY + 10 * Math.sin((self.mouseAngle - 90) * Math.PI / 180);
-
-				ctx.lineWidth = 2;
-				ctx.strokeStyle = 'black';
-				//drawLine(innerX, innerY, outerX, outerY);
-
-				drawLine(innerX1, innerY1, outerX1, outerY1);
-				drawLine(innerX2, innerY2, outerX2, outerY2);
-				drawLine(innerX1, innerY1, innerX2, innerY2);
-				drawLine(outerX1, outerY1, outerX2, outerY2);
-/*				ctx.fillStyle = 'red';
-				ctx.fillRect(innerX1, innerY1, 5, 5);
-
-				ctx.fillRect(outerX1, outerY1, 5, 5);*/
+				var rightArm = [[60, 68], [64, 66], [72, 82], [74, 102], [72, 110], [60, 120], [48, 118], [42, 114], [54, 102], [54, 104], [60, 104], [60, 68]];
+				sketch(self.x, self.y, self.mouseAngle, rightArm);
 			}
 
 			Player.list[self.id] = self;
@@ -267,6 +236,42 @@
 			ctx.fillText("Angle: " + playerData.mouseAngle, 0, 90);
 			ctx.fillText("HP: " + playerData.hp, 0, 105);
 			ctx.fillText("HP Max: " + playerData.hpMax, 0, 120);
+		}
+
+		//Receives multi-dimensional array of points
+		var sketch = function(selfX, selfY, mouseAngle, points){
+			//Translate Co-Ordinates relative to player's position
+			var translatedCoOrdinates = [];
+			for(i = 0; i < points.length; i++){
+				var xPoint = points[i][0]*3;
+				var yPoint = points[i][1]*3;
+
+				var originX = selfX - Player.list[selfId].x + getDrawPosition('x');
+				var originY = selfY - Player.list[selfId].y + getDrawPosition('y');
+
+				var diameter = Math.sqrt(Math.pow(xPoint, 2) + Math.pow(yPoint, 2));
+				var angle = Math.acos((Math.pow(xPoint, 2) + Math.pow(yPoint, 2) - Math.pow(diameter, 2))/(2*xPoint*yPoint));
+				var mouseAngleRadians = mouseAngle * (Math.PI / 180) - (Math.PI)/2;
+
+				var xOffset = Math.cos(angle + mouseAngleRadians) * diameter;
+				var yOffset = Math.sin(angle + mouseAngleRadians) * diameter;
+
+				translatedCoOrdinates.push([originX + xOffset, originY + yOffset]);
+			}
+
+			ctx.lineWidth = 1;
+			ctx.strokeStyle = 'red';
+			ctx.beginPath();
+			ctx.moveTo(originX, originY);
+			console.log("Starting Point: " + Math.round(originX), Math.round(originY));
+
+			//Draw Translated Co-ordinates
+			for(i = 0; i < translatedCoOrdinates.length; i++){
+				ctx.lineTo(translatedCoOrdinates[i][0], translatedCoOrdinates[i][1]);
+				console.log("Point: " + i + "  " + Math.round(translatedCoOrdinates[i][0]), Math.round(translatedCoOrdinates[i][1]));
+			}
+			ctx.stroke();
+			console.log("Drawn");
 		}
 
 		var drawLine = function(originX, originY, destinationX, destinationY){
