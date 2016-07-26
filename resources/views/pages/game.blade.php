@@ -17,7 +17,9 @@
 		var gamePageWidth = getWindowWidth();
 		var gamePageHeight = getWindowHeight();
 		var playerDiameter = 27;
-  		var bulletDiameter = 10;
+		var playerCollisionRadiusX = 70;
+		var playerCollisionRadiusY = 40;
+  		var bulletDiameter = 2;
 		var selfId = null;
 
 		//Connection Information
@@ -71,6 +73,20 @@
 				ctx.lineWidth = 4;
 				ctx.strokeStyle = (self.id == selfId) ? '#005c99' : '#990000';
       			ctx.stroke();
+
+      			if(DEBUG){
+      				//Origin Point
+      				ctx.fillStyle = 'red';
+      				ctx.fillRect(x-2, y-2, 5, 5);
+
+      				//Collision Radius
+      				ctx.lineWidth = 1;
+	      			ctx.strokeStyle = 'red';
+      				var mouseAngleRadians = self.mouseAngle * (Math.PI / 180);
+					var collisionCenterX = (Math.cos(mouseAngleRadians) * (playerCollisionRadiusX-30)) + (self.x - Player.list[selfId].x + getDrawPosition('x'));
+					var collisionCenterY = (Math.sin(mouseAngleRadians) * (playerCollisionRadiusX-30)) + (self.y - Player.list[selfId].y + getDrawPosition('y'));
+	      			drawEllipse(collisionCenterX, collisionCenterY, playerCollisionRadiusX, playerCollisionRadiusY, mouseAngleRadians, 0, 2 * Math.PI);
+      			}
 			}
 			self.drawGun = function(){
 				var rightGun = [[78.00,1.57080], [78.03,1.54516], [52.04,1.53235], [52.00,1.57080]];
@@ -268,27 +284,18 @@
 				var xOffset = Math.cos(angle + mouseAngleRadians) * diameter * 2;
 				var yOffset = Math.sin(angle + mouseAngleRadians) * diameter * 2;
 
-				//console.log("Angle: " + angle);
-
 				translatedCoOrdinates.push([originX + xOffset, originY + yOffset]);
 			}
-			//console.log(translatedCoOrdinates);
 
 			ctx.lineWidth = 4;
 			ctx.strokeStyle = drawColor;
 			ctx.beginPath();
-			//console.log("Starting Point: " + Math.round(originX), Math.round(originY));
-
-			//Create starting point for first iteration
-			//ctx.moveTo(translatedCoOrdinates[0][0], translatedCoOrdinates[0][1]);
 
 			//Draw Translated Co-ordinates
 			for(i = 0; i < translatedCoOrdinates.length; i++){
 				ctx.lineTo(translatedCoOrdinates[i][0], translatedCoOrdinates[i][1]);
-				//console.log("Point: " + i + "  " + Math.round(translatedCoOrdinates[i][0]), Math.round(translatedCoOrdinates[i][1]));
 			}
 			ctx.stroke();
-			//console.log("Drawn");
 		}
 
 		var drawLine = function(originX, originY, destinationX, destinationY){
@@ -301,6 +308,13 @@
 		var drawCircle = function(x, y, diameter){
 			ctx.beginPath();
 			ctx.arc(x, y, diameter, 0, 2 * Math.PI);
+			ctx.stroke();
+		}
+
+		var drawEllipse = function(x, y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise = false){
+			console.log("Drawn");
+			ctx.beginPath();
+			ctx.ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise);
 			ctx.stroke();
 		}
 

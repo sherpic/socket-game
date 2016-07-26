@@ -13,6 +13,8 @@ var PORT = 8001;
 var DEBUG = true;
 var GAME_WIDTH = 1000;
 var GAME_HEIGHT = 1000;
+var playerCollisionRadiusX = 70;
+var playerCollisionRadiusY = 40;
 
 serv.listen(PORT);
 console.log("Server started.");
@@ -43,8 +45,21 @@ var Entity = function(param){
 			self.y += self.spdY;
 		}
 	}
-	self.getDistance = function(pt){
-		return Math.sqrt(Math.pow(self.x-pt.x,2) + Math.pow(self.y-pt.y,2));
+	self.getDistance = function(player){
+		return Math.sqrt(Math.pow(self.x-player.x,2) + Math.pow(self.y-player.y,2));
+	}
+	self.collidingWith = function(player){
+		var mouseAngleRadians = player.mouseAngle * (Math.PI / 180);
+		var collisionCenterX = (Math.cos(mouseAngleRadians) * (playerCollisionRadiusX-30)) + player.x;
+		var collisionCenterY = (Math.sin(mouseAngleRadians) * (playerCollisionRadiusX-30)) + player.y;
+
+		var collisionFactor = Math.pow(self.x - collisionCenterX, 2)/Math.pow(playerCollisionRadiusX, 2) + Math.pow(self.y - collisionCenterY, 2)/Math.pow(playerCollisionRadiusY, 2);
+
+		if(collisionFactor <= 1){
+			console.log("Collided: " + collisionFactor);
+			return true;
+		}
+		return false;
 	}
 	return self;
 }
@@ -271,15 +286,16 @@ var Bullet = function(param){
 		super_update();
 
 		for(var i in Player.list){
-			var p = Player.list[i];
-			if(self.getDistance(p) < 45 && self.parent !== p.id){
-				p.hp -= 1;
-				if(p.hp <= 0){
+			var player = Player.list[i];
+			player.mouseAngle
+			if(self.collidingWith(player) && self.parent !== player.id){
+				player.hp -= 1;
+				if(player.hp <= 0){
 					var shooter = Player.list[self.parent];
 					if(shooter)
 						shooter.recordKill();
-					p.recordDeath();
-					p.respawn();
+					player.recordDeath();
+					player.respawn();
 				}
 				self.toRemove = true;
 			}
