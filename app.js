@@ -55,7 +55,7 @@ var Entity = function(param){
 
 		//var collisionFactor = Math.pow(self.x - collisionCenterX, 2)/Math.pow(playerCollisionRadiusX, 2) + Math.pow(self.y - collisionCenterY, 2)/Math.pow(playerCollisionRadiusY, 2);
 
-		var collisionFactor = Math.pow(Math.cos(mouseAngleRadians) * (self.x - collisionCenterX) + Math.sin(mouseAngleRadians) * (self.y - collisionCenterY), 2) / Math.pow(playerCollisionRadiusX, 2) + Math.pow(Math.sin(mouseAngleRadians) * (self.x - collisionCenterX) + Math.cos(mouseAngleRadians) * (self.y - collisionCenterY), 2) / Math.pow(playerCollisionRadiusY, 2);
+		var collisionFactor = Math.pow(Math.cos(mouseAngleRadians) * (self.x - collisionCenterX) + Math.sin(mouseAngleRadians) * (self.y - collisionCenterY), 2) / Math.pow(playerCollisionRadiusX, 2) + Math.pow(Math.sin(mouseAngleRadians) * (self.x - collisionCenterX) - Math.cos(mouseAngleRadians) * (self.y - collisionCenterY), 2) / Math.pow(playerCollisionRadiusY, 2);
 
 		if(collisionFactor <= 1){
 			return true;
