@@ -16,7 +16,7 @@
 		var GAME_ARENA_HEIGHT = 1000;
 		var gamePageWidth = getWindowWidth();
 		var gamePageHeight = getWindowHeight();
-		var playerDiameter = 40;
+		var playerDiameter = 27;
   		var bulletDiameter = 10;
 		var selfId = null;
 
@@ -73,8 +73,22 @@
       			ctx.stroke();
 			}
 			self.drawGun = function(){
-				var rightArm = [[60, 68], [64, 66], [72, 82], [74, 102], [72, 110], [60, 120], [48, 118], [42, 114], [54, 102], [54, 104], [60, 104], [60, 68]];
-				sketch(self.x, self.y, self.mouseAngle, rightArm);
+				var rightGun = [[78.00,1.57080], [78.03,1.54516], [52.04,1.53235], [52.00,1.57080]];
+				var rightArmLine1 = [[49.00,1.57080], [48.26,1.46700], [34.93,1.33971], [16.28,0.82885], [12.73,0.78540]];
+				var rightArmLine2 = [[61.03,1.53802], [53.46,1.43948], [35.74,1.25790], [25.81,0.62025], [22.85,0.40489], [14,0]];
+
+				var leftGun = [[78.00,1.57080], [78.03,1.59643], [52.04,1.60924], [52.00,1.57080]];
+				var leftArmLine1 = [[49.00,1.57080], [48.26,1.67459], [34.93,1.80189], [16.28,2.31274], [12.73,2.35619]];
+				var leftArmLine2 = [[61.03,1.60357], [53.46,1.70211], [35.74,1.88370], [22.85,2.73670], [22.84731932,2.73670], [14.00,3.14159]];
+
+				var drawColor = (self.id == selfId) ? '#005c99' : '#990000';
+
+				sketch(self.x, self.y, self.mouseAngle, rightGun, drawColor);
+				sketch(self.x, self.y, self.mouseAngle, rightArmLine1, drawColor);
+				sketch(self.x, self.y, self.mouseAngle, rightArmLine2, drawColor);
+				sketch(self.x, self.y, self.mouseAngle, leftGun, drawColor);
+				sketch(self.x, self.y, self.mouseAngle, leftArmLine1, drawColor);
+				sketch(self.x, self.y, self.mouseAngle, leftArmLine2, drawColor);
 			}
 
 			Player.list[self.id] = self;
@@ -94,8 +108,8 @@
 				var originX = self.x - Player.list[selfId].x + getDrawPosition('x');
 				var originY = self.y - Player.list[selfId].y + getDrawPosition('y');
 
-				x = originX + (playerDiameter + 50) * Math.cos(self.angle * Math.PI / 180);
-				y = originY + (playerDiameter + 50) * Math.sin(self.angle * Math.PI / 180);
+				x = originX + (playerDiameter + 132) * Math.cos(self.angle * Math.PI / 180);
+				y = originY + (playerDiameter + 132) * Math.sin(self.angle * Math.PI / 180);
 
 				drawCircle(x, y, bulletDiameter);
 				ctx.fillStyle = '#484848';
@@ -239,39 +253,42 @@
 		}
 
 		//Receives multi-dimensional array of points
-		var sketch = function(selfX, selfY, mouseAngle, points){
+		var sketch = function(selfX, selfY, mouseAngle, points, drawColor){
 			//Translate Co-Ordinates relative to player's position
 			var translatedCoOrdinates = [];
 			for(i = 0; i < points.length; i++){
-				var xPoint = points[i][0]*3;
-				var yPoint = points[i][1]*3;
-
 				var originX = selfX - Player.list[selfId].x + getDrawPosition('x');
 				var originY = selfY - Player.list[selfId].y + getDrawPosition('y');
 
-				var diameter = Math.sqrt(Math.pow(xPoint, 2) + Math.pow(yPoint, 2));
-				var angle = Math.acos((Math.pow(xPoint, 2) + Math.pow(yPoint, 2) - Math.pow(diameter, 2))/(2*xPoint*yPoint));
+				var diameter = points[i][0];
+				var angle = points[i][1];
+
 				var mouseAngleRadians = mouseAngle * (Math.PI / 180) - (Math.PI)/2;
 
-				var xOffset = Math.cos(angle + mouseAngleRadians) * diameter;
-				var yOffset = Math.sin(angle + mouseAngleRadians) * diameter;
+				var xOffset = Math.cos(angle + mouseAngleRadians) * diameter * 2;
+				var yOffset = Math.sin(angle + mouseAngleRadians) * diameter * 2;
+
+				//console.log("Angle: " + angle);
 
 				translatedCoOrdinates.push([originX + xOffset, originY + yOffset]);
 			}
+			//console.log(translatedCoOrdinates);
 
-			ctx.lineWidth = 1;
-			ctx.strokeStyle = 'red';
+			ctx.lineWidth = 4;
+			ctx.strokeStyle = drawColor;
 			ctx.beginPath();
-			ctx.moveTo(originX, originY);
-			console.log("Starting Point: " + Math.round(originX), Math.round(originY));
+			//console.log("Starting Point: " + Math.round(originX), Math.round(originY));
+
+			//Create starting point for first iteration
+			//ctx.moveTo(translatedCoOrdinates[0][0], translatedCoOrdinates[0][1]);
 
 			//Draw Translated Co-ordinates
 			for(i = 0; i < translatedCoOrdinates.length; i++){
 				ctx.lineTo(translatedCoOrdinates[i][0], translatedCoOrdinates[i][1]);
-				console.log("Point: " + i + "  " + Math.round(translatedCoOrdinates[i][0]), Math.round(translatedCoOrdinates[i][1]));
+				//console.log("Point: " + i + "  " + Math.round(translatedCoOrdinates[i][0]), Math.round(translatedCoOrdinates[i][1]));
 			}
 			ctx.stroke();
-			console.log("Drawn");
+			//console.log("Drawn");
 		}
 
 		var drawLine = function(originX, originY, destinationX, destinationY){
