@@ -16,9 +16,9 @@
 		var GAME_ARENA_HEIGHT = 1000;
 		var gamePageWidth = getWindowWidth();
 		var gamePageHeight = getWindowHeight();
-		var playerDiameter = 27;
-		var playerCollisionRadiusX = 70;
-		var playerCollisionRadiusY = 40;
+		var playerDiameter = 20;
+		var playerCollisionRadiusX = 55;
+		var playerCollisionRadiusY = 30;
   		var bulletDiameter = 2;
 		var selfId = null;
 
@@ -83,8 +83,8 @@
       				ctx.lineWidth = 1;
 	      			ctx.strokeStyle = 'red';
       				var mouseAngleRadians = self.mouseAngle * (Math.PI / 180);
-					var collisionCenterX = (Math.cos(mouseAngleRadians) * (playerCollisionRadiusX-30)) + (self.x - Player.list[selfId].x + getDrawPosition('x'));
-					var collisionCenterY = (Math.sin(mouseAngleRadians) * (playerCollisionRadiusX-30)) + (self.y - Player.list[selfId].y + getDrawPosition('y'));
+					var collisionCenterX = (Math.cos(mouseAngleRadians) * (playerCollisionRadiusX-20)) + (self.x - Player.list[selfId].x + getDrawPosition('x'));
+					var collisionCenterY = (Math.sin(mouseAngleRadians) * (playerCollisionRadiusX-20)) + (self.y - Player.list[selfId].y + getDrawPosition('y'));
 	      			drawEllipse(collisionCenterX, collisionCenterY, playerCollisionRadiusX, playerCollisionRadiusY, mouseAngleRadians, 0, 2 * Math.PI);
       			}
 			}
@@ -281,8 +281,8 @@
 
 				var mouseAngleRadians = mouseAngle * (Math.PI / 180) - (Math.PI)/2;
 
-				var xOffset = Math.cos(angle + mouseAngleRadians) * diameter * 2;
-				var yOffset = Math.sin(angle + mouseAngleRadians) * diameter * 2;
+				var xOffset = Math.cos(angle + mouseAngleRadians) * diameter * 1.5;
+				var yOffset = Math.sin(angle + mouseAngleRadians) * diameter * 1.5;
 
 				translatedCoOrdinates.push([originX + xOffset, originY + yOffset]);
 			}

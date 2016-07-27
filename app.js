@@ -13,8 +13,8 @@ var PORT = 8001;
 var DEBUG = true;
 var GAME_WIDTH = 1000;
 var GAME_HEIGHT = 1000;
-var playerCollisionRadiusX = 70;
-var playerCollisionRadiusY = 40;
+var playerCollisionRadiusX = 55;
+var playerCollisionRadiusY = 30;
 
 serv.listen(PORT);
 console.log("Server started.");
@@ -50,10 +50,8 @@ var Entity = function(param){
 	}
 	self.collidingWith = function(player){
 		var mouseAngleRadians = player.mouseAngle * (Math.PI / 180);
-		var collisionCenterX = (Math.cos(mouseAngleRadians) * (playerCollisionRadiusX-30)) + player.x;
-		var collisionCenterY = (Math.sin(mouseAngleRadians) * (playerCollisionRadiusX-30)) + player.y;
-
-		//var collisionFactor = Math.pow(self.x - collisionCenterX, 2)/Math.pow(playerCollisionRadiusX, 2) + Math.pow(self.y - collisionCenterY, 2)/Math.pow(playerCollisionRadiusY, 2);
+		var collisionCenterX = (Math.cos(mouseAngleRadians) * (playerCollisionRadiusX-20)) + player.x;
+		var collisionCenterY = (Math.sin(mouseAngleRadians) * (playerCollisionRadiusX-20)) + player.y;
 
 		var collisionFactor = Math.pow(Math.cos(mouseAngleRadians) * (self.x - collisionCenterX) + Math.sin(mouseAngleRadians) * (self.y - collisionCenterY), 2) / Math.pow(playerCollisionRadiusX, 2) + Math.pow(Math.sin(mouseAngleRadians) * (self.x - collisionCenterX) - Math.cos(mouseAngleRadians) * (self.y - collisionCenterY), 2) / Math.pow(playerCollisionRadiusY, 2);
 
