@@ -53,6 +53,7 @@
 			self.x = initPack.x;
 			self.y = initPack.y;
 			self.mouseAngle = initPack.mouseAngle;
+			self.pressingAttack = initPack.pressingAttack;
 			self.hp = initPack.hp;
 			self.hpMax = initPack.hpMax;
 			self.kills = initPack.kills;
@@ -101,12 +102,19 @@
 
 				var drawColor = (self.id == selfId) ? '#005c99' : '#990000';
 
-				sketch(self.x, self.y, self.mouseAngle, rightGun, drawColor);
-				sketch(self.x, self.y, self.mouseAngle, rightArmLine1, drawColor);
-				sketch(self.x, self.y, self.mouseAngle, rightArmLine2, drawColor);
-				sketch(self.x, self.y, self.mouseAngle, leftGun, drawColor);
-				sketch(self.x, self.y, self.mouseAngle, leftArmLine1, drawColor);
-				sketch(self.x, self.y, self.mouseAngle, leftArmLine2, drawColor);
+				if(self.pressingAttack){
+					console.log('pressing');
+					var kickback = true;
+				}else{
+					var kickback = false;
+				}
+
+				sketch(self.x, self.y, self.mouseAngle, rightGun, drawColor, kickback);
+				sketch(self.x, self.y, self.mouseAngle, rightArmLine1, drawColor, kickback);
+				sketch(self.x, self.y, self.mouseAngle, rightArmLine2, drawColor, kickback);
+				sketch(self.x, self.y, self.mouseAngle, leftGun, drawColor, kickback);
+				sketch(self.x, self.y, self.mouseAngle, leftArmLine1, drawColor, kickback);
+				sketch(self.x, self.y, self.mouseAngle, leftArmLine2, drawColor, kickback);
 			}
 
 			Player.list[self.id] = self;
@@ -127,8 +135,8 @@
 				var originX = self.x - Player.list[selfId].x + getDrawPosition('x');
 				var originY = self.y - Player.list[selfId].y + getDrawPosition('y');
 
-				x = originX + (playerDiameter + 93) * Math.cos(self.angle * Math.PI / 180);
-				y = originY + (playerDiameter + 93) * Math.sin(self.angle * Math.PI / 180);
+				x = originX + (playerDiameter + 100) * Math.cos(self.angle * Math.PI / 180);
+				y = originY + (playerDiameter + 100) * Math.sin(self.angle * Math.PI / 180);
 
 				if(self.deathTimer > 0 && self.deathTimer < 6){
 					//Bullet explodes
@@ -176,6 +184,9 @@
 					}
 					if(pack.y !== undefined){
 						p.y = pack.y;
+					}
+					if(pack.pressingAttack !== undefined){
+						p.pressingAttack = pack.pressingAttack;
 					}
 					if(pack.hp !== undefined){
 						p.hp = pack.hp;
@@ -287,14 +298,20 @@
 		}
 
 		//Receives multi-dimensional array of points
-		var sketch = function(selfX, selfY, mouseAngle, points, drawColor){
+		var sketch = function(selfX, selfY, mouseAngle, points, drawColor, kickback = false){
 			//Translate Co-Ordinates relative to player's position
 			var translatedCoOrdinates = [];
 			for(i = 0; i < points.length; i++){
 				var originX = selfX - Player.list[selfId].x + getDrawPosition('x');
 				var originY = selfY - Player.list[selfId].y + getDrawPosition('y');
 
-				var diameter = points[i][0];
+				if(kickback){
+					var diameter = points[i][0] - 2;
+				}
+				else{
+					var diameter = points[i][0];
+				}
+				
 				var angle = points[i][1];
 
 				var mouseAngleRadians = mouseAngle * (Math.PI / 180) - (Math.PI)/2;

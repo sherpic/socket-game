@@ -187,6 +187,7 @@ var Player = function(param){
 			x: self.x,
 			y: self.y,
 			mouseAngle: self.mouseAngle,
+			pressingAttack: self.pressingAttack,
 			number: self.number,
 			hp:self.hp,
 			hpMax:self.hpMax,
@@ -200,6 +201,7 @@ var Player = function(param){
 			x: self.x,
 			y: self.y,
 			mouseAngle: self.mouseAngle,
+			pressingAttack: self.pressingAttack,
 			hp:self.hp,
 			kills:self.kills,
 			deaths:self.deaths,
@@ -331,7 +333,6 @@ Bullet.update = function(){
 	for(var i in Bullet.list){
 		var bullet = Bullet.list[i];
 		if(bullet.toRemove){
-			console.log(bullet.deathTimer);
 			if(bullet.deathTimer < 5){
 				bullet.deathTimer++;
 			}
