@@ -271,16 +271,18 @@ var Bullet = function(param){
 	var self = Entity(param);
 	self.id = Math.random();
 	self.angle = param.angle;
+	self.diameter = 2;
 	self.spdX = Math.cos(param.angle/180*Math.PI) * 20;
 	self.spdY = Math.sin(param.angle/180*Math.PI) * 20;
 	self.affectedByBoundaries = false;
 	self.parent = param.parent;
 
-	self.timer = 0;
+	self.liveTimer = 0;
+	self.deathTimer = 0;
 	self.toRemove = false;
 	var super_update = self.update;
 	self.update = function(){
-		if(self.timer++ > 30)
+		if(self.liveTimer++ > 30)
 			self.toRemove = true;
 		super_update();
 
@@ -305,6 +307,7 @@ var Bullet = function(param){
 			id:self.id,
 			x:self.x,
 			y:self.y,
+			diameter:self.diameter,
 		};
 	}
 	self.getUpdatePack = function(){
@@ -313,6 +316,8 @@ var Bullet = function(param){
 			x:self.x,
 			y:self.y,
 			angle:self.angle,
+			deathTimer:self.deathTimer,
+			diameter:self.diameter,
 		};
 	}
 	Bullet.list[self.id] = self;
@@ -325,13 +330,18 @@ Bullet.update = function(){
 	var pack = [];
 	for(var i in Bullet.list){
 		var bullet = Bullet.list[i];
-		bullet.update();
 		if(bullet.toRemove){
-			delete Bullet.list[i];
-			removePack.bullet.push(bullet.id);
+			console.log(bullet.deathTimer);
+			if(bullet.deathTimer < 5){
+				bullet.deathTimer++;
+			}
+			else{
+				delete Bullet.list[i];
+				removePack.bullet.push(bullet.id);
+			}
 		}
-		else
-			pack.push(bullet.getUpdatePack());
+		pack.push(bullet.getUpdatePack());
+		bullet.update();
 	}
 	return pack;
 }

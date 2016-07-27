@@ -19,8 +19,10 @@
 		var playerDiameter = 20;
 		var playerCollisionRadiusX = 55;
 		var playerCollisionRadiusY = 30;
-  		var bulletDiameter = 2;
 		var selfId = null;
+
+		//Timing
+		var date = new Date();
 
 		//Connection Information
 		var SERVER_NAME = "{{ $_SERVER['SERVER_NAME'] }}";
@@ -118,6 +120,7 @@
 			self.id = initPack.id;
 			self.x = initPack.x;
 			self.y = initPack.y;
+			self.diameter = initPack.diameter;
 			self.angle = initPack.angle;
 
 			self.draw = function(){
@@ -127,11 +130,23 @@
 				x = originX + (playerDiameter + 93) * Math.cos(self.angle * Math.PI / 180);
 				y = originY + (playerDiameter + 93) * Math.sin(self.angle * Math.PI / 180);
 
-				drawCircle(x, y, bulletDiameter);
-				ctx.fillStyle = '#484848';
+				if(self.deathTimer > 0 && self.deathTimer < 6){
+					//Bullet explodes
+					setInterval(function(){
+						self.diameter = self.diameter * 1.3;
+					}, 40);
+					ctx.fillStyle = 'rgba(72,72,72,' + (1 - self.deathTimer * 0.3) + ')';
+					ctx.strokeStyle = 'rgba(0,0,0,' + (1 - self.deathTimer * 0.3) + ')';
+				}
+				else{
+					ctx.fillStyle = '#484848';
+					ctx.strokeStyle = '#000000';
+				}
+
+				drawCircle(x, y, self.diameter);
 				ctx.fill();
 				ctx.lineWidth = 4;
-				ctx.strokeStyle = '#000000';
+				
       			ctx.stroke();
 			}
 
@@ -189,6 +204,9 @@
 					if(pack.angle !== undefined){
 						b.angle = pack.angle;
 					}
+					if(pack.deathTimer !== undefined && pack.deathTimer > 0){
+						b.deathTimer = pack.deathTimer;
+					}
 				}
 			}
 		});
@@ -198,7 +216,6 @@
 				delete Player.list[data.player[i]];
 			}
 			for(var i = 0; i < data.bullet.length; i++){
-				var bullet = Bullet.list[data.bullet[i]];
 				delete Bullet.list[data.bullet[i]];
 			}
 		});
@@ -313,7 +330,6 @@
 		}
 
 		var drawEllipse = function(x, y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise = false){
-			console.log("Drawn");
 			ctx.beginPath();
 			ctx.ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise);
 			ctx.stroke();
