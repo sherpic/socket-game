@@ -63,7 +63,7 @@
 				//HP Bar
 				var hpWidth = self.hp / self.hpMax * 80;
 				ctx.fillStyle = 'red';
-				ctx.fillRect(x - (hpWidth / 2), y+45, hpWidth, 5);
+				ctx.fillRect(x - (hpWidth / 2), y+35, hpWidth, 5);
 
 				//Player Ball
 				drawCircle(x, y, playerDiameter);
@@ -124,8 +124,8 @@
 				var originX = self.x - Player.list[selfId].x + getDrawPosition('x');
 				var originY = self.y - Player.list[selfId].y + getDrawPosition('y');
 
-				x = originX + (playerDiameter + 132) * Math.cos(self.angle * Math.PI / 180);
-				y = originY + (playerDiameter + 132) * Math.sin(self.angle * Math.PI / 180);
+				x = originX + (playerDiameter + 93) * Math.cos(self.angle * Math.PI / 180);
+				y = originY + (playerDiameter + 93) * Math.sin(self.angle * Math.PI / 180);
 
 				drawCircle(x, y, bulletDiameter);
 				ctx.fillStyle = '#484848';
@@ -198,6 +198,7 @@
 				delete Player.list[data.player[i]];
 			}
 			for(var i = 0; i < data.bullet.length; i++){
+				var bullet = Bullet.list[data.bullet[i]];
 				delete Bullet.list[data.bullet[i]];
 			}
 		});

@@ -271,8 +271,8 @@ var Bullet = function(param){
 	var self = Entity(param);
 	self.id = Math.random();
 	self.angle = param.angle;
-	self.spdX = Math.cos(param.angle/180*Math.PI) * 10;
-	self.spdY = Math.sin(param.angle/180*Math.PI) * 10;
+	self.spdX = Math.cos(param.angle/180*Math.PI) * 20;
+	self.spdY = Math.sin(param.angle/180*Math.PI) * 20;
 	self.affectedByBoundaries = false;
 	self.parent = param.parent;
 
@@ -280,7 +280,7 @@ var Bullet = function(param){
 	self.toRemove = false;
 	var super_update = self.update;
 	self.update = function(){
-		if(self.timer++ > 100)
+		if(self.timer++ > 30)
 			self.toRemove = true;
 		super_update();
 
@@ -288,6 +288,7 @@ var Bullet = function(param){
 			var player = Player.list[i];
 			player.mouseAngle
 			if(self.collidingWith(player) && self.parent !== player.id){
+				self.toRemove = true;
 				player.hp -= 1;
 				if(player.hp <= 0){
 					var shooter = Player.list[self.parent];
@@ -296,7 +297,6 @@ var Bullet = function(param){
 					player.recordDeath();
 					player.respawn();
 				}
-				self.toRemove = true;
 			}
 		}
 	}
@@ -386,5 +386,5 @@ setInterval(function(){
 	removePack.player = [];
 	removePack.bullet = [];
 
-}, 1000/25)
+}, 40)
 
