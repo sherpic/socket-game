@@ -92,16 +92,11 @@
       			}
 			}
 			self.drawGun = function(){
-				var rightGun = [[78.00,1.57080], [78.03,1.54516], [52.04,1.53235], [52.00,1.57080]];
-				var rightArmLine1 = [[49.00,1.57080], [48.26,1.46700], [34.93,1.33971], [16.28,0.82885], [12.73,0.78540]];
-				var rightArmLine2 = [[61.03,1.53802], [53.46,1.43948], [35.74,1.25790], [25.81,0.62025], [22.85,0.40489], [14,0]];
-
-				var leftGun = [[78.00,1.57080], [78.03,1.59643], [52.04,1.60924], [52.00,1.57080]];
-				var leftArmLine1 = [[49.00,1.57080], [48.26,1.67459], [34.93,1.80189], [16.28,2.31274], [12.73,2.35619]];
-				var leftArmLine2 = [[61.03,1.60357], [53.46,1.70211], [35.74,1.88370], [22.85,2.73670], [22.84731932,2.73670], [14.00,3.14159]];
+				var playerModel = [[[78.00,1.57080], [78.03,1.54516], [52.04,1.53235], [52.00,1.57080]],[[49.00,1.57080], [48.26,1.46700], [34.93,1.33971], [16.28,0.82885], [12.73,0.78540]], [[61.03,1.53802], [53.46,1.43948], [35.74,1.25790], [25.81,0.62025], [22.85,0.40489], [14,0]], [[78.00,1.57080], [78.03,1.59643], [52.04,1.60924], [52.00,1.57080]], [[49.00,1.57080], [48.26,1.67459], [34.93,1.80189], [16.28,2.31274], [12.73,2.35619]], [[61.03,1.60357], [53.46,1.70211], [35.74,1.88370], [22.85,2.73670], [22.84731932,2.73670], [14.00,3.14159]]];
 
 				var drawColor = (self.id == selfId) ? '#005c99' : '#990000';
 
+				//Recoil animation
 				if(self.pressingAttack){
 					console.log('pressing');
 					var kickback = true;
@@ -109,12 +104,7 @@
 					var kickback = false;
 				}
 
-				sketch(self.x, self.y, self.mouseAngle, rightGun, drawColor, kickback);
-				sketch(self.x, self.y, self.mouseAngle, rightArmLine1, drawColor, kickback);
-				sketch(self.x, self.y, self.mouseAngle, rightArmLine2, drawColor, kickback);
-				sketch(self.x, self.y, self.mouseAngle, leftGun, drawColor, kickback);
-				sketch(self.x, self.y, self.mouseAngle, leftArmLine1, drawColor, kickback);
-				sketch(self.x, self.y, self.mouseAngle, leftArmLine2, drawColor, kickback);
+				sketch(self.x, self.y, self.mouseAngle, playerModel, drawColor, kickback);
 			}
 
 			Player.list[self.id] = self;
@@ -297,40 +287,49 @@
 			ctx.fillText("HP Max: " + playerData.hpMax, 0, 120);
 		}
 
-		//Receives multi-dimensional array of points
-		var sketch = function(selfX, selfY, mouseAngle, points, drawColor, kickback = false){
+		//Receives multi-dimensional array of playerModel containing arrays of points
+		var sketch = function(selfX, selfY, mouseAngle, playerModel, drawColor, kickback = false){
 			//Translate Co-Ordinates relative to player's position
-			var translatedCoOrdinates = [];
-			for(i = 0; i < points.length; i++){
-				var originX = selfX - Player.list[selfId].x + getDrawPosition('x');
-				var originY = selfY - Player.list[selfId].y + getDrawPosition('y');
+			var translatedPlayerModel = [];
 
-				if(kickback){
-					var diameter = points[i][0] - 2;
+			for(h = 0; h < playerModel.length; h++){
+
+				var translatedPlayerModelPiece = [];
+
+				for(i = 0; i < playerModel[h].length; i++){
+					var originX = selfX - Player.list[selfId].x + getDrawPosition('x');
+					var originY = selfY - Player.list[selfId].y + getDrawPosition('y');
+
+					if(kickback){
+						var diameter = playerModel[h][i][0] - 1;
+					}
+					else{
+						var diameter = playerModel[h][i][0];
+					}
+					
+					var angle = playerModel[h][i][1];
+
+					var mouseAngleRadians = mouseAngle * (Math.PI / 180) - (Math.PI)/2;
+
+					var xOffset = Math.cos(angle + mouseAngleRadians) * diameter * 6;
+					var yOffset = Math.sin(angle + mouseAngleRadians) * diameter * 6;
+
+					translatedPlayerModelPiece.push([originX + xOffset, originY + yOffset]);
 				}
-				else{
-					var diameter = points[i][0];
-				}
-				
-				var angle = points[i][1];
-
-				var mouseAngleRadians = mouseAngle * (Math.PI / 180) - (Math.PI)/2;
-
-				var xOffset = Math.cos(angle + mouseAngleRadians) * diameter * 1.5;
-				var yOffset = Math.sin(angle + mouseAngleRadians) * diameter * 1.5;
-
-				translatedCoOrdinates.push([originX + xOffset, originY + yOffset]);
+				translatedPlayerModel.push(translatedPlayerModelPiece);
 			}
 
 			ctx.lineWidth = 4;
 			ctx.strokeStyle = drawColor;
 			ctx.beginPath();
 
-			//Draw Translated Co-ordinates
-			for(i = 0; i < translatedCoOrdinates.length; i++){
-				ctx.lineTo(translatedCoOrdinates[i][0], translatedCoOrdinates[i][1]);
+			for(h = 0; h < translatedPlayerModel.length; h++){//Iterate through translated player model pieces
+				ctx.moveTo(translatedPlayerModel[h][0][0], translatedPlayerModel[h][0][1]);//Move to starting co-ords of each player model piece
+				for(i = 0; i < translatedPlayerModel[h].length; i++){//Iterate through translated co-ordinates in each player model piece
+					ctx.lineTo(translatedPlayerModel[h][i][0], translatedPlayerModel[h][i][1]);
+				}
+				ctx.stroke();
 			}
-			ctx.stroke();
 		}
 
 		var drawLine = function(originX, originY, destinationX, destinationY){
