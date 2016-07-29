@@ -58,6 +58,7 @@
 			self.hpMax = initPack.hpMax;
 			self.kills = initPack.kills;
 			self.deaths = initPack.deaths;
+			self.shootingFrame = 0;
 
 			self.drawBody = function(){
 				var x = self.x - Player.list[selfId].x + getDrawPosition('x');
@@ -92,19 +93,27 @@
       			}
 			}
 			self.drawGun = function(){
-				var playerModel = [[[78.00,1.57080], [78.03,1.54516], [52.04,1.53235], [52.00,1.57080]],[[49.00,1.57080], [48.26,1.46700], [34.93,1.33971], [16.28,0.82885], [12.73,0.78540]], [[61.03,1.53802], [53.46,1.43948], [35.74,1.25790], [25.81,0.62025], [22.85,0.40489], [14,0]], [[78.00,1.57080], [78.03,1.59643], [52.04,1.60924], [52.00,1.57080]], [[49.00,1.57080], [48.26,1.67459], [34.93,1.80189], [16.28,2.31274], [12.73,2.35619]], [[61.03,1.60357], [53.46,1.70211], [35.74,1.88370], [22.85,2.73670], [22.84731932,2.73670], [14.00,3.14159]]];
+				var playerModel = [[[[78.00, 1.57080],[78.03, 1.54516],[52.04, 1.53235],[52.00, 1.57080]],[[49.00, 1.57080],[48.26, 1.46700],[34.93, 1.33971],[16.28, 0.82885],[12.73, 0.78540]],[[61.03, 1.53802],[53.46, 1.43948],[35.74, 1.25790],[25.81, 0.62025],[22.85, 0.40489],[14.00, 0.00000]],[[78.00, 1.57080],[78.03, 1.59643],[52.04, 1.60924],[52.00, 1.57080]],[[49.00, 1.57080],[48.26, 1.67459],[34.93, 1.80189],[16.28, 2.31274],[12.73, 2.35619]],[[61.03, 1.60357],[53.46, 1.70211],[35.74, 1.88370],[25.81, 2.52134],[22.85, 2.73670],[14.00, 3.14159]]],[[[76.00,1.57080],[76.03, 1.54449],[50.04,1.53082],[50.00,1.57080]],[[78.00,1.57080],[78.01,1.55798],[76.01,1.55764]],[[59.54,1.43603],[61.52,1.44039]],[[49.00,1.57080],[48.26,1.46700],[34.93,1.33971],[16.28,0.82885],[12.73,0.78540]],[[61.03,1.53802],[53.46,1.43948],[35.74,1.25790],[25.81,0.62025],[22.85,0.40489],[14.00,0.00000]],[[78.00,1.57080],[78.03,1.59643],[52.04,1.60924],[52.00,1.57080]],[[78.00,1.57080],[78.01,1.58361],[76.01,1.58395]],[[49.00,1.57080],[48.26,1.67459],[34.93,1.80189],[16.28,2.31274],[12.73,2.35619]],[[61.03,1.60357],[53.46,1.70211],[35.74,1.88370],[25.81,2.52134],[22.85,2.73670],[14.00,3.14159]]],[[[74.00,1.57080],[74.03,1.54378],[48.04,1.52915],[48.00,1.57080]],[[76.00,1.57080],[76.01,1.55764],[74.01,1.55728]],[[60.88,1.32183],[62.82,1.32968]],[[47.00,1.57080],[46.27,1.46253],[32.98,1.32582],[14.87,0.73782],[11.40,0.66104]],[[59.03,1.53691],[51.48,1.43439],[33.84,1.23970],[24.70,0.55431],[22.14,0.32175],[14.00,0.00000]],[[76.00,1.57080],[76.03,1.59710],[50.04,1.61077],[50.00,1.57080]],[[76.00,1.57080],[76.01,1.58395],[74.01,1.58431]],[[47.00,1.57080],[46.27,1.67907],[32.98,1.81577],[14.87,2.40378],[11.40,2.48055]],[[59.03,1.60468],[51.48,1.70720],[33.84,1.90189],[24.70,2.58728],[22.14,2.81984],[14.00,3.14159]]],[[[76.00,1.57080],[76.03,1.54449],[50.04,1.53082],[50.00,1.57080]],[[78.00,1.57080],[78.01,1.55798],[76.01,1.55764]],[[62.63,1.22885],[64.51,1.23924]],[[49.00,1.57080],[48.26,1.46700],[34.93,1.33971],[16.28,0.82885],[12.73,0.78540]],[[61.03,1.53802],[53.46,1.43948],[35.74,1.25790],[25.81,0.62025],[22.85,0.40489],[14.00,0.00000]],[[78.00,1.57080],[78.03,1.59643],[52.04,1.60924],[52.00,1.57080]],[[78.00,1.57080],[78.01,1.58361],[76.01,1.58395]],[[49.00,1.57080],[48.26,1.67459],[34.93,1.80189],[16.28,2.31274],[12.73,2.35619]],[[61.03,1.60357],[53.46,1.70211],[35.74,1.88370],[25.81,2.52134],[22.85,2.73670],[14.00,3.14159]]]];
 
 				var drawColor = (self.id == selfId) ? '#005c99' : '#990000';
 
 				//Recoil animation
 				if(self.pressingAttack){
-					console.log('pressing');
-					var kickback = true;
-				}else{
-					var kickback = false;
+					console.log("Player Model size: " + playerModel.length);
+					if(self.shootingFrame < 3){
+						self.shootingFrame++;
+					}
+					else{
+						self.shootingFrame = 0;
+					}
+					sketch(self.x, self.y, self.mouseAngle, playerModel[self.shootingFrame], drawColor);
+					console.log('pressing iteration: ' + self.shootingFrame);
+					
 				}
-
-				sketch(self.x, self.y, self.mouseAngle, playerModel, drawColor, kickback);
+				else{
+					self.shootingFrame = 0;
+					sketch(self.x, self.y, self.mouseAngle, playerModel[self.shootingFrame], drawColor);
+				}
 			}
 
 			Player.list[self.id] = self;
@@ -288,37 +297,31 @@
 		}
 
 		//Receives multi-dimensional array of playerModel containing arrays of points
-		var sketch = function(selfX, selfY, mouseAngle, playerModel, drawColor, kickback = false){
+		var sketch = function(selfX, selfY, mouseAngle, playerModel, drawColor){
 			//Translate Co-Ordinates relative to player's position
 			var translatedPlayerModel = [];
 
-			for(h = 0; h < playerModel.length; h++){
+			for(h = 0; h < playerModel.length; h++){ //Iterate through individual player model pieces
 
 				var translatedPlayerModelPiece = [];
 
-				for(i = 0; i < playerModel[h].length; i++){
+				for(i = 0; i < playerModel[h].length; i++){ //Iterate through individual player model piece co-ordinates
 					var originX = selfX - Player.list[selfId].x + getDrawPosition('x');
 					var originY = selfY - Player.list[selfId].y + getDrawPosition('y');
-
-					if(kickback){
-						var diameter = playerModel[h][i][0] - 1;
-					}
-					else{
-						var diameter = playerModel[h][i][0];
-					}
 					
 					var angle = playerModel[h][i][1];
 
 					var mouseAngleRadians = mouseAngle * (Math.PI / 180) - (Math.PI)/2;
+					var diameter = playerModel[h][i][0];
 
-					var xOffset = Math.cos(angle + mouseAngleRadians) * diameter * 6;
-					var yOffset = Math.sin(angle + mouseAngleRadians) * diameter * 6;
+					var xOffset = Math.cos(angle + mouseAngleRadians) * diameter * 1.5;
+					var yOffset = Math.sin(angle + mouseAngleRadians) * diameter * 1.5;
 
 					translatedPlayerModelPiece.push([originX + xOffset, originY + yOffset]);
 				}
 				translatedPlayerModel.push(translatedPlayerModelPiece);
 			}
-
+			
 			ctx.lineWidth = 4;
 			ctx.strokeStyle = drawColor;
 			ctx.beginPath();
