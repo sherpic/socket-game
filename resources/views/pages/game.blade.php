@@ -102,6 +102,7 @@
 				if(self.beingHit){
 					var diameterModifier = -1;
 					self.beingHit = false;
+					drawColor = '#ff1a1a';
 				}
 				else{
 					var diameterModifier = 0;
