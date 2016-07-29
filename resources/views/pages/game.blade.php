@@ -100,7 +100,7 @@
 
 				//Hit Animation
 				if(self.beingHit){
-					var diameterModifier = -3;
+					var diameterModifier = -1;
 					self.beingHit = false;
 				}
 				else{
@@ -323,10 +323,10 @@
 					var angle = playerModel[h][i][1];
 
 					var mouseAngleRadians = mouseAngle * (Math.PI / 180) - (Math.PI)/2;
-					var diameter = playerModel[h][i][0];
+					var diameter = playerModel[h][i][0] + diameterModifier;
 
-					var xOffset = Math.cos(angle + mouseAngleRadians) * diameter * 1.5 - diameterModifier;
-					var yOffset = Math.sin(angle + mouseAngleRadians) * diameter * 1.5 - diameterModifier;
+					var xOffset = Math.cos(angle + mouseAngleRadians) * diameter * 1.5;
+					var yOffset = Math.sin(angle + mouseAngleRadians) * diameter * 1.5;
 
 					translatedPlayerModelPiece.push([originX + xOffset, originY + yOffset]);
 				}
