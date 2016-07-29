@@ -78,6 +78,7 @@ var Player = function(param){
 	self.maxSpd = 10;
 	self.affectedByBoundaries = true;
 	self.hp = 10;
+	self.beingHit = false;
 	self.hpMax = 10;
 	self.kills = 0;
 	self.deaths = 0;
@@ -203,6 +204,7 @@ var Player = function(param){
 			mouseAngle: self.mouseAngle,
 			pressingAttack: self.pressingAttack,
 			hp:self.hp,
+			beingHit:self.beingHit,
 			kills:self.kills,
 			deaths:self.deaths,
 			hpMax:self.hpMax,
@@ -269,6 +271,13 @@ Player.update = function(){
 	return pack;
 }
 
+Player.resetOneTickOnlyVariables = function(){
+	for(var i in Player.list){
+		var player = Player.list[i];
+		player.beingHit = false;
+	}
+}
+
 var Bullet = function(param){
 	var self = Entity(param);
 	self.id = Math.random();
@@ -290,10 +299,10 @@ var Bullet = function(param){
 
 		for(var i in Player.list){
 			var player = Player.list[i];
-			player.mouseAngle
 			if(self.collidingWith(player) && self.parent !== player.id){
 				self.toRemove = true;
 				player.hp -= 1;
+				player.beingHit = true;
 				if(player.hp <= 0){
 					var shooter = Player.list[self.parent];
 					if(shooter)
@@ -381,9 +390,10 @@ var initPack = {player:[], bullet:[]};
 var removePack = {player:[], bullet:[]};
 
 setInterval(function(){
+	//Bullet has to be updated ahead of player as player reactions depend upon bullet collisions
 	var pack = {
-		player:Player.update(),
 		bullet:Bullet.update(),
+		player:Player.update(),
 	}
 
 	for(var i in SOCKET_LIST){
@@ -396,6 +406,8 @@ setInterval(function(){
 	initPack.bullet = [];
 	removePack.player = [];
 	removePack.bullet = [];
+
+	Player.resetOneTickOnlyVariables();
 
 }, 40)
 

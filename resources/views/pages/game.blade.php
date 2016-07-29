@@ -55,6 +55,7 @@
 			self.mouseAngle = initPack.mouseAngle;
 			self.pressingAttack = initPack.pressingAttack;
 			self.hp = initPack.hp;
+			self.beingHit = false;
 			self.hpMax = initPack.hpMax;
 			self.kills = initPack.kills;
 			self.deaths = initPack.deaths;
@@ -97,22 +98,29 @@
 
 				var drawColor = (self.id == selfId) ? '#005c99' : '#990000';
 
+				//Hit Animation
+				if(self.beingHit){
+					var diameterModifier = -3;
+					self.beingHit = false;
+				}
+				else{
+					var diameterModifier = 0;
+				}
+
 				//Recoil animation
 				if(self.pressingAttack){
-					console.log("Player Model size: " + playerModel.length);
 					if(self.shootingFrame < 3){
 						self.shootingFrame++;
 					}
 					else{
 						self.shootingFrame = 0;
 					}
-					sketch(self.x, self.y, self.mouseAngle, playerModel[self.shootingFrame], drawColor);
-					console.log('pressing iteration: ' + self.shootingFrame);
+					sketch(self.x, self.y, self.mouseAngle, playerModel[self.shootingFrame], drawColor, diameterModifier);
 					
 				}
 				else{
 					self.shootingFrame = 0;
-					sketch(self.x, self.y, self.mouseAngle, playerModel[self.shootingFrame], drawColor);
+					sketch(self.x, self.y, self.mouseAngle, playerModel[self.shootingFrame], drawColor, diameterModifier);
 				}
 			}
 
@@ -189,6 +197,9 @@
 					}
 					if(pack.hp !== undefined){
 						p.hp = pack.hp;
+					}
+					if(pack.beingHit !== undefined){
+						p.beingHit = pack.beingHit;
 					}
 					if(pack.kills !== undefined){
 						p.kills = pack.kills;
@@ -297,7 +308,7 @@
 		}
 
 		//Receives multi-dimensional array of playerModel containing arrays of points
-		var sketch = function(selfX, selfY, mouseAngle, playerModel, drawColor){
+		var sketch = function(selfX, selfY, mouseAngle, playerModel, drawColor, diameterModifier = 0){
 			//Translate Co-Ordinates relative to player's position
 			var translatedPlayerModel = [];
 
@@ -314,8 +325,8 @@
 					var mouseAngleRadians = mouseAngle * (Math.PI / 180) - (Math.PI)/2;
 					var diameter = playerModel[h][i][0];
 
-					var xOffset = Math.cos(angle + mouseAngleRadians) * diameter * 1.5;
-					var yOffset = Math.sin(angle + mouseAngleRadians) * diameter * 1.5;
+					var xOffset = Math.cos(angle + mouseAngleRadians) * diameter * 1.5 - diameterModifier;
+					var yOffset = Math.sin(angle + mouseAngleRadians) * diameter * 1.5 - diameterModifier;
 
 					translatedPlayerModelPiece.push([originX + xOffset, originY + yOffset]);
 				}
