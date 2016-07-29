@@ -60,6 +60,7 @@
 			self.kills = initPack.kills;
 			self.deaths = initPack.deaths;
 			self.numberOfBullets = initPack.numberOfBullets;
+			self.reloading = false;
 			self.shootingFrame = 0;
 
 			self.drawBody = function(){
@@ -110,7 +111,7 @@
 				}
 
 				//Recoil animation
-				if(self.pressingAttack){
+				if(self.pressingAttack && !self.reloading){
 					if(self.shootingFrame < 3){
 						self.shootingFrame++;
 					}
@@ -212,6 +213,9 @@
 					if(pack.numberOfBullets !== undefined){
 						p.numberOfBullets = pack.numberOfBullets;
 					}
+					if(pack.reloading !== undefined){
+						p.reloading = pack.reloading;
+					}
 					if(pack.mouseAngle !== undefined){
 						p.mouseAngle = pack.mouseAngle;
 					}
@@ -310,7 +314,8 @@
 			ctx.fillText("Angle: " + playerData.mouseAngle, 0, 90);
 			ctx.fillText("HP: " + playerData.hp, 0, 105);
 			ctx.fillText("HP Max: " + playerData.hpMax, 0, 120);
-			ctx.fillText("Number Of Bullets: " + playerData.numberOfBullets, 0, 150);
+			ctx.fillText("Number Of Bullets: " + playerData.numberOfBullets, 0, 135);
+			ctx.fillText("Reloading: " + playerData.reloading, 0, 150);
 		}
 
 		//Receives multi-dimensional array of playerModel containing arrays of points

@@ -79,6 +79,7 @@ var Player = function(param){
 	self.affectedByBoundaries = true;
 	self.hp = 10;
 	self.beingHit = false;
+	self.shooting = false;
 	self.reloading = false;
 	self.hpMax = 10;
 	self.numberOfBullets = 8;
@@ -90,17 +91,21 @@ var Player = function(param){
 	self.update = function(){
 		self.updateSpd();
 		super_update();
-		if(!self.reloading && self.pressingAttack){
+		if(self.pressingAttack && !self.shooting && !self.reloading){
 			if(self.numberOfBullets > 0){
+				self.shooting = true;
 				self.shootBullet(self.mouseAngle);
 				self.numberOfBullets--;
+				setTimeout(function(){
+					self.shooting = false;
+				}, 160);
 			}
 			else{
 				self.reloading = true;
 				setTimeout(function(){
 					self.numberOfBullets = self.maxBullets;
 					self.reloading = false;
-				}, 3000);
+				}, 2000);
 			}
 		}
 	}
@@ -224,6 +229,7 @@ var Player = function(param){
 			deaths:self.deaths,
 			hpMax:self.hpMax,
 			numberOfBullets:self.numberOfBullets,
+			reloading:self.reloading,
 		};
 	}
 
