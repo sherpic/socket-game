@@ -79,7 +79,10 @@ var Player = function(param){
 	self.affectedByBoundaries = true;
 	self.hp = 10;
 	self.beingHit = false;
+	self.reloading = false;
 	self.hpMax = 10;
+	self.numberOfBullets = 8;
+	self.maxBullets = 8;
 	self.kills = 0;
 	self.deaths = 0;
 
@@ -87,8 +90,18 @@ var Player = function(param){
 	self.update = function(){
 		self.updateSpd();
 		super_update();
-		if(self.pressingAttack){
-			self.shootBullet(self.mouseAngle);
+		if(!self.reloading && self.pressingAttack){
+			if(self.numberOfBullets > 0){
+				self.shootBullet(self.mouseAngle);
+				self.numberOfBullets--;
+			}
+			else{
+				self.reloading = true;
+				setTimeout(function(){
+					self.numberOfBullets = self.maxBullets;
+					self.reloading = false;
+				}, 3000);
+			}
 		}
 	}
 	self.shootBullet = function(angle){
@@ -194,6 +207,8 @@ var Player = function(param){
 			hpMax:self.hpMax,
 			kills:self.kills,
 			deaths:self.deaths,
+			numberOfBullets:self.numberOfBullets,
+			maxBullets:self.maxBullets,
 		};
 	}
 	self.getUpdatePack = function(){
@@ -208,6 +223,7 @@ var Player = function(param){
 			kills:self.kills,
 			deaths:self.deaths,
 			hpMax:self.hpMax,
+			numberOfBullets:self.numberOfBullets,
 		};
 	}
 

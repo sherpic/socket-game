@@ -59,6 +59,7 @@
 			self.hpMax = initPack.hpMax;
 			self.kills = initPack.kills;
 			self.deaths = initPack.deaths;
+			self.numberOfBullets = initPack.numberOfBullets;
 			self.shootingFrame = 0;
 
 			self.drawBody = function(){
@@ -208,6 +209,9 @@
 					if(pack.deaths !== undefined){
 						p.deaths = pack.deaths;
 					}
+					if(pack.numberOfBullets !== undefined){
+						p.numberOfBullets = pack.numberOfBullets;
+					}
 					if(pack.mouseAngle !== undefined){
 						p.mouseAngle = pack.mouseAngle;
 					}
@@ -306,6 +310,7 @@
 			ctx.fillText("Angle: " + playerData.mouseAngle, 0, 90);
 			ctx.fillText("HP: " + playerData.hp, 0, 105);
 			ctx.fillText("HP Max: " + playerData.hpMax, 0, 120);
+			ctx.fillText("Number Of Bullets: " + playerData.numberOfBullets, 0, 150);
 		}
 
 		//Receives multi-dimensional array of playerModel containing arrays of points
