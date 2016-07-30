@@ -119,61 +119,70 @@ var Player = function(param){
 	}
 
 	self.updateSpd = function(){
-		if(self.pressingLeft && self.x > 20 && !self.pressingDown && !self.pressingUp){
+		if(self.pressingLeft && !self.pressingRight && !self.pressingUp && !self.pressingDown && self.x > 20){
 			self.spdX = -self.maxSpd;
 			self.spdY = 0;
 		}
-		else if(self.pressingRight && self.x < GAME_WIDTH-20 && !self.pressingDown && !self.pressingUp){
+		else if(!self.pressingLeft && self.pressingRight && !self.pressingUp && !self.pressingDown && self.x < GAME_WIDTH-20){
 			self.spdX = self.maxSpd;
 			self.spdY = 0;
 		}
-		else if(self.pressingUp && self.y > 20 && !self.pressingLeft && !self.pressingRight){
+		else if(!self.pressingLeft && !self.pressingRight && self.pressingUp && !self.pressingDown && self.y > 20){
+			self.spdX = 0;
 			self.spdY = -self.maxSpd;
-			self.spdX = 0;
 		}
-		else if(self.pressingDown && self.y < GAME_HEIGHT-20 && !self.pressingLeft && !self.pressingRight){
+		else if(!self.pressingLeft && !self.pressingRight && !self.pressingUp && self.pressingDown && self.y < GAME_HEIGHT-20){
+			self.spdX = 0;
 			self.spdY = self.maxSpd;
-			self.spdX = 0;
 		}
-		else if(self.pressingLeft && self.x > 20 && self.pressingUp && self.y > 20){
+		else if(self.pressingLeft && !self.pressingRight && self.pressingUp && !self.pressingDown && self.x > 20 && self.y > 20){
 			self.spdX = (0.71*-self.maxSpd);
 			self.spdY = (0.71*-self.maxSpd);
 		}
-		else if(self.pressingLeft && self.x > 20 && self.pressingDown && self.y < GAME_HEIGHT-20){
+		else if(self.pressingLeft && !self.pressingRight && !self.pressingUp && self.pressingDown && self.x > 20 && self.y < GAME_HEIGHT-20){
 			self.spdX = (0.71*-self.maxSpd);
 			self.spdY = (0.71*self.maxSpd);
 		}
-		else if(self.pressingRight && self.x < GAME_WIDTH-20 && self.pressingUp && self.y > 20){
+		else if(!self.pressingLeft && self.pressingRight && self.pressingUp && !self.pressingDown && self.x < GAME_WIDTH-20 && self.y > 20){
 			self.spdX = (0.71*self.maxSpd);
 			self.spdY = (0.71*-self.maxSpd);
 		}
-		else if(self.pressingRight && self.x < GAME_WIDTH-20 && self.pressingDown && self.y < GAME_HEIGHT-20){
+		else if(!self.pressingLeft && self.pressingRight && !self.pressingUp && self.pressingDown && self.x < GAME_WIDTH-20 && self.y < GAME_HEIGHT-20){
 			self.spdX = (0.71*self.maxSpd);
 			self.spdY = (0.71*self.maxSpd);
 		}
-		else if(self.pressingLeft && self.x > 20 && self.pressingUp && self.y <= 20){
+		else if(self.pressingLeft && !self.pressingRight && self.pressingUp && !self.pressingDown && self.x > 10 && self.x < 20 && self.y > 20){
+			self.spdX = 0;
+			self.spdY = -self.maxSpd;
+		}
+		else if(self.pressingLeft && !self.pressingRight && !self.pressingUp && self.pressingDown && self.x > 10 && self.x < 20 && self.y < GAME_HEIGHT-10){
+			self.spdX = 0;
+			self.spdY = self.maxSpd;
+		}
+		else if(!self.pressingLeft && self.pressingRight && self.pressingUp && !self.pressingDown && self.x > GAME_WIDTH-20 && self.x < GAME_WIDTH-10 && self.y > 20){
+			self.spdX = 0;
+			self.spdY = -self.maxSpd;
+		}
+		else if(!self.pressingLeft && self.pressingRight && !self.pressingUp && self.pressingDown && self.x > GAME_WIDTH-20 && self.x < GAME_WIDTH-10 && self.y < GAME_HEIGHT-20){
+			self.spdX = 0;
+			self.spdY = self.maxSpd;
+		}
+
+		else if(self.pressingLeft && !self.pressingRight && self.pressingUp && !self.pressingDown && self.x > 20 && self.y > 10 && self.y < 20){
 			self.spdX = -self.maxSpd;
+			self.spdY = 0;
 		}
-		else if(self.pressingLeft && self.x > 20 && self.pressingDown && self.y >= GAME_HEIGHT-20){
+		else if(self.pressingLeft && !self.pressingRight && !self.pressingUp && self.pressingDown && self.x > 10 && self.y > GAME_HEIGHT-20 && self.y < GAME_HEIGHT-10){
 			self.spdX = -self.maxSpd;
+			self.spdY = 0;
 		}
-		else if(self.pressingRight && self.x < GAME_WIDTH-20 && self.pressingUp && self.y <= 20){
+		else if(!self.pressingLeft && self.pressingRight && self.pressingUp && !self.pressingDown && self.x < GAME_WIDTH-20 && self.y > 10 && self.y < 20){
 			self.spdX = self.maxSpd;
+			self.spdY = 0;
 		}
-		else if(self.pressingRight && self.x < GAME_WIDTH-20 && self.pressingDown && self.y >= GAME_HEIGHT-20){
+		else if(!self.pressingLeft && self.pressingRight && !self.pressingUp && self.pressingDown && self.x < GAME_WIDTH-20 && self.y > GAME_HEIGHT-20 && self.y < GAME_HEIGHT-10){
 			self.spdX = self.maxSpd;
-		}
-		else if(self.pressingLeft && self.x <= 20 && self.pressingUp && self.y > 20){
-			self.spdY = self.maxSpd;
-		}
-		else if(self.pressingLeft && self.x <= 20 && self.pressingDown && self.y < GAME_HEIGHT-20){
-			self.spdY = self.maxSpd;
-		}
-		else if(self.pressingRight && self.x >= GAME_WIDTH-20 && self.pressingUp && self.y > 20){
-			self.spdY = self.maxSpd;
-		}
-		else if(self.pressingRight && self.x >= GAME_WIDTH-20 && self.pressingDown && self.y < GAME_HEIGHT-20){
-			self.spdY = self.maxSpd;
+			self.spdY = 0;
 		}
 		else{
 			self.spdY = 0;
@@ -305,8 +314,8 @@ var Bullet = function(param){
 	self.id = Math.random();
 	self.angle = param.angle;
 	self.diameter = 2;
-	self.spdX = Math.cos(param.angle/180*Math.PI) * 20;
-	self.spdY = Math.sin(param.angle/180*Math.PI) * 20;
+	self.spdX = Math.cos(param.angle/180*Math.PI) * 40;
+	self.spdY = Math.sin(param.angle/180*Math.PI) * 40;
 	self.affectedByBoundaries = false;
 	self.parent = param.parent;
 
@@ -315,7 +324,7 @@ var Bullet = function(param){
 	self.toRemove = false;
 	var super_update = self.update;
 	self.update = function(){
-		if(self.liveTimer++ > 30)
+		if(self.liveTimer++ > 15)
 			self.toRemove = true;
 		super_update();
 

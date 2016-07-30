@@ -105,26 +105,17 @@
 					var diameterModifier = -1;
 					self.beingHit = false;
 					drawColor = '#ff1a1a';
-				}
-				else{
+				}else{
 					var diameterModifier = 0;
 				}
 
 				//Recoil animation
-				if(self.pressingAttack && !self.reloading){
-					if(self.shootingFrame < 3){
-						self.shootingFrame++;
-					}
-					else{
-						self.shootingFrame = 0;
-					}
-					sketch(self.x, self.y, self.mouseAngle, playerModel[self.shootingFrame], drawColor, diameterModifier);
-					
-				}
-				else{
+				if(self.pressingAttack && !self.reloading && self.shootingFrame < 3){
+					self.shootingFrame++;
+				}else{
 					self.shootingFrame = 0;
-					sketch(self.x, self.y, self.mouseAngle, playerModel[self.shootingFrame], drawColor, diameterModifier);
 				}
+				sketch(self.x, self.y, self.mouseAngle, playerModel[self.shootingFrame], drawColor, diameterModifier);
 			}
 
 			Player.list[self.id] = self;
