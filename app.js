@@ -155,7 +155,7 @@ var Player = function(param){
 			self.spdX = 0;
 			self.spdY = -self.maxSpd;
 		}
-		else if(self.pressingLeft && !self.pressingRight && !self.pressingUp && self.pressingDown && self.x > 10 && self.x < 20 && self.y < GAME_HEIGHT-10){
+		else if(self.pressingLeft && !self.pressingRight && !self.pressingUp && self.pressingDown && self.x > 10 && self.x < 20 && self.y < GAME_HEIGHT-20){
 			self.spdX = 0;
 			self.spdY = self.maxSpd;
 		}
@@ -172,7 +172,7 @@ var Player = function(param){
 			self.spdX = -self.maxSpd;
 			self.spdY = 0;
 		}
-		else if(self.pressingLeft && !self.pressingRight && !self.pressingUp && self.pressingDown && self.x > 10 && self.y > GAME_HEIGHT-20 && self.y < GAME_HEIGHT-10){
+		else if(self.pressingLeft && !self.pressingRight && !self.pressingUp && self.pressingDown && self.x > 20 && self.y > GAME_HEIGHT-20 && self.y < GAME_HEIGHT-10){
 			self.spdX = -self.maxSpd;
 			self.spdY = 0;
 		}
