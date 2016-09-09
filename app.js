@@ -13,6 +13,7 @@ var PORT = 8001;
 var DEBUG = true;
 var GAME_WIDTH = 1000;
 var GAME_HEIGHT = 1000;
+var FRICTION = 0.75;
 var playerCollisionRadiusX = 55;
 var playerCollisionRadiusY = 30;
 
@@ -76,6 +77,9 @@ var Player = function(param){
 	self.windowWidth = 0;
 	self.windowHeight = 0;
 	self.maxSpd = 10;
+	self.currentSpeedX = 0;
+	self.currentSpeedY = 0;
+	self.movementStatus = 'stopped';
 	self.affectedByBoundaries = true;
 	self.hp = 10;
 	self.beingHit = false;
@@ -167,7 +171,6 @@ var Player = function(param){
 			self.spdX = 0;
 			self.spdY = self.maxSpd;
 		}
-
 		else if(self.pressingLeft && !self.pressingRight && self.pressingUp && !self.pressingDown && self.x > 20 && self.y > 10 && self.y < 20){
 			self.spdX = -self.maxSpd;
 			self.spdY = 0;
@@ -191,8 +194,24 @@ var Player = function(param){
 	}
 
 	self.updatePosition = function(){
-		self.x += self.spdX;
-		self.y += self.spdY;
+		//Gradually slows player to a stop
+		if(self.spdX != 0 || self.spdY != 0){
+			self.movementStatus = 'moving';
+			self.currentSpeedX = self.spdX;
+			self.currentSpeedY = self.spdY;
+		}
+		else if(self.movementStatus == 'moving' && self.spdX == 0 && self.spdY == 0){
+			self.movementStatus = 'slowing';
+		}
+		else if(self.movementStatus == 'slowing'){
+			self.currentSpeedX = self.currentSpeedX * FRICTION;
+			self.currentSpeedY = self.currentSpeedY * FRICTION;
+		}
+		else{
+			self.movementStatus = 'stopped';
+		}
+		self.x += self.currentSpeedX;
+		self.y += self.currentSpeedY;
 	}
 
 	self.respawn = function(){
@@ -441,4 +460,3 @@ setInterval(function(){
 	Player.resetOneTickOnlyVariables();
 
 }, 40)
-
