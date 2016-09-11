@@ -14,6 +14,9 @@ module.exports = function(param){
 	self.windowWidth = 0;
 	self.windowHeight = 0;
 	self.maxSpd = 10;
+	self.currentSpeedX = 0;
+	self.currentSpeedY = 0;
+	self.movementStatus = 'stopped';
 	self.affectedByBoundaries = true;
 	self.friction = 0.75;
 	self.hp = 10;
@@ -149,8 +152,8 @@ module.exports = function(param){
 		else{
 			self.movementStatus = 'stopped';
 		}
-		self.x += self.spdX;
-		self.y += self.spdY;
+		self.x += self.currentSpeedX;
+		self.y += self.currentSpeedY;
 	}
 
 	self.respawn = function(){
