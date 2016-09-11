@@ -23,12 +23,13 @@ var removePack = {player:[], bullet:[]};
 var Player = require('./game/Player');
 var Bullet = require('./game/Bullet');
 
-Player.list = {};
+GLOBAL.playerList = {};
+
 Player.onConnect = function(socket){
 	var player = Player({
 		id: socket.id
 	});
-	Player.list[player.id] = player;
+	GLOBAL.playerList[player.id] = player;
 	initPack.player.push(player.getInitPack());
 
 	socket.on('keyPress', function(data){
@@ -62,20 +63,20 @@ Player.onConnect = function(socket){
 
 Player.getAllInitPack = function(){
 	var players = [];
-	for(var i in Player.list)
-		players.push(Player.list[i].getInitPack());
+	for(var i in GLOBAL.playerList)
+		players.push(GLOBAL.playerList[i].getInitPack());
 	return players;
 }
 
 Player.onDisconnect = function(socket){
-	delete Player.list[socket.id];
+	delete GLOBAL.playerList[socket.id];
 	removePack.player.push(socket.id);
 }
 
 Player.update = function(){
 	var pack = [];
-	for(var i in Player.list){
-		var player = Player.list[i];
+	for(var i in GLOBAL.playerList){
+		var player = GLOBAL.playerList[i];
 		player.update();
 		pack.push(player.getUpdatePack());
 	}
@@ -83,8 +84,8 @@ Player.update = function(){
 }
 
 Player.resetOneTickOnlyVariables = function(){
-	for(var i in Player.list){
-		var player = Player.list[i];
+	for(var i in GLOBAL.playerList){
+		var player = GLOBAL.playerList[i];
 		player.beingHit = false;
 	}
 }

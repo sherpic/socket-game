@@ -19,16 +19,14 @@ module.exports = function(param){
 			self.toRemove = true;
 		super_update();
 
-		console.log(Player.list);
-
-		for(var i in Player.list){
-			var player = Player.list[i];
+		for(var i in GLOBAL.playerList){
+			var player = GLOBAL.playerList[i];
 			if(self.collidingWith(player) && self.parent !== player.id){
 				self.toRemove = true;
 				player.hp -= 1;
 				player.beingHit = true;
 				if(player.hp <= 0){
-					var shooter = Player.list[self.parent];
+					var shooter = GLOBAL.playerList[self.parent];
 					if(shooter)
 						shooter.recordKill();
 					player.recordDeath();
