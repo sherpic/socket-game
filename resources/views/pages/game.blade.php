@@ -25,6 +25,12 @@
 	</form> -->
 	<script src="//cdn.socket.io/socket.io-1.0.0.js"></script>
 	<script>
+		var changeClass = function(className){
+			document.getElementById('classSelectionScreen').style.visibility = 'hidden';
+			document.getElementById('ctx').style.visibility = 'visible';
+			runGame(className);
+		}
+	
 		function runGame(className){
 			//Game Environment
 			var DEBUG = true;
@@ -53,7 +59,7 @@
 	  		var yDrawPosition = getDrawPosition('y');
 	  		$('body').on('contextmenu', '#ctx', function(e){ return false; }); //Disables right-click
 	  		$(window).resize(function(){ resizeCanvas(); });
-			var Player = function(initPack, className){
+			var Player = function(initPack){
 				var self = {};
 				self.id = initPack.id;
 				self.number = initPack.number;
@@ -412,11 +418,6 @@
 					socket.emit('sendMsgToServer', chatInput.value);
 				chatInput.value = '';
 			}*/
-		}
-		var changeClass = function(className){
-			document.getElementById('classSelectionScreen').style.visibility = 'hidden';
-			document.getElementById('ctx').style.visibility = 'visible';
-			runGame(className);
 		}
 	</script>
 @stop
