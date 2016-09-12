@@ -33,8 +33,6 @@
 			var gamePageWidth = getWindowWidth();
 			var gamePageHeight = getWindowHeight();
 			var playerDiameter = 20;
-			var playerCollisionRadiusX = 55;
-			var playerCollisionRadiusY = 30;
 			var selfId = null;
 			//Timing
 			var date = new Date();
@@ -55,7 +53,7 @@
 	  		var yDrawPosition = getDrawPosition('y');
 	  		$('body').on('contextmenu', '#ctx', function(e){ return false; }); //Disables right-click
 	  		$(window).resize(function(){ resizeCanvas(); });
-			var Player = function(initPack){
+			var Player = function(initPack, className){
 				var self = {};
 				self.id = initPack.id;
 				self.number = initPack.number;
@@ -86,6 +84,9 @@
 					ctx.strokeStyle = (self.id == selfId) ? '#005c99' : '#990000';
 	      			ctx.stroke();
 	      			if(DEBUG){
+	      				var playerCollisionRadiusX = 55;
+						var playerCollisionRadiusY = 30;
+
 	      				//Origin Point
 	      				ctx.fillStyle = 'red';
 	      				ctx.fillRect(x-2, y-2, 5, 5);
@@ -279,9 +280,9 @@
 				ctx.fillText("Debug", 0, 15);
 				ctx.fillText("Kills: " + Player.list[selfId].kills + " Deaths: " + Player.list[selfId].deaths, 0, 30);
 				ctx.fillText("ID: " + playerData.number, 0, 45);
-				ctx.fillText("X: " + playerData.x, 0, 60);
-				ctx.fillText("Y: " + playerData.y, 0, 75);
-				ctx.fillText("Angle: " + playerData.mouseAngle, 0, 90);
+				ctx.fillText("X: " + playerData.x.toFixed(2), 0, 60);
+				ctx.fillText("Y: " + playerData.y.toFixed(2), 0, 75);
+				ctx.fillText("Angle: " + playerData.mouseAngle.toFixed(2), 0, 90);
 				ctx.fillText("HP: " + playerData.hp, 0, 105);
 				ctx.fillText("HP Max: " + playerData.hpMax, 0, 120);
 				ctx.fillText("Number Of Bullets: " + playerData.numberOfBullets, 0, 135);
