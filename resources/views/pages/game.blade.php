@@ -5,15 +5,15 @@
 
 	<div id="classSelectionScreen">
 		<h1 class="choose-class-heading">Choose your class</h1>
-		<div class="class-selector" onclick="changeClass('assault')">
+		<div class="class-selector" onclick="setClass('assault')">
 			<img class="center" src="/img/assault.png">
 			<h2>Assault</h2>
 		</div>
-		<div class="class-selector" onclick="changeClass('shotgun')">
+		<div class="class-selector" onclick="setClass('shotgun')">
 			<img class="center" src="/img/shotgun.png">
 			<h2>Shotgun</h2>
 		</div>
-		<div class="class-selector" onclick="changeClass('sniper')">
+		<div class="class-selector" onclick="setClass('sniper')">
 			<img class="center" src="/img/sniper.png">
 			<h2>Sniper</h2>
 		</div>
@@ -25,13 +25,18 @@
 	</form> -->
 	<script src="//cdn.socket.io/socket.io-1.0.0.js"></script>
 	<script>
-		var changeClass = function(className){
+		function setClass(className){
 			document.getElementById('classSelectionScreen').style.visibility = 'hidden';
 			document.getElementById('ctx').style.visibility = 'visible';
 			runGame(className);
 		}
-	
+
 		function runGame(className){
+			console.log("Running game as :" + className);
+			var SERVER_NAME = "{{ $_SERVER['SERVER_NAME'] }}";
+			var SERVER_PORT = 8001;
+			socket = io.connect(SERVER_NAME + ':' + SERVER_PORT, {query: 'class=' + className});
+
 			//Game Environment
 			var DEBUG = true;
 			var GAME_ARENA_WIDTH = 1000;
@@ -43,9 +48,6 @@
 			//Timing
 			var date = new Date();
 			//Connection Information
-			var SERVER_NAME = "{{ $_SERVER['SERVER_NAME'] }}";
-			var SERVER_PORT = 8001;
-			var socket = io.connect(SERVER_NAME + ':' + SERVER_PORT);
 			//Chat Data
 			/*var chatText = document.getElementById('chat-text');
 			var chatInput = document.getElementById('chat-input');
@@ -62,6 +64,7 @@
 			var Player = function(initPack){
 				var self = {};
 				self.id = initPack.id;
+				self.class = initPack.class;
 				self.number = initPack.number;
 				self.x = initPack.x;
 				self.y = initPack.y;
@@ -283,7 +286,7 @@
 			var drawDebugVariables = function(){
 				ctx.fillStyle = 'red';
 				var playerData = Player.list[selfId];
-				ctx.fillText("Debug", 0, 15);
+				ctx.fillText("Class: " + Player.list[selfId].class, 0, 15);
 				ctx.fillText("Kills: " + Player.list[selfId].kills + " Deaths: " + Player.list[selfId].deaths, 0, 30);
 				ctx.fillText("ID: " + playerData.number, 0, 45);
 				ctx.fillText("X: " + playerData.x.toFixed(2), 0, 60);

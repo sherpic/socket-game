@@ -4,6 +4,7 @@ var Bullet = require('./Bullet');
 module.exports = function(param){
 	var self = Entity(param);
 
+	self.class = param.class;
 	self.number = "" + Math.floor(10*Math.random());
 	self.pressingRight = false;
 	self.pressingLeft = false;
@@ -173,6 +174,7 @@ module.exports = function(param){
 	self.getInitPack = function(){
 		return {
 			id: self.id,
+			class: self.class,
 			x: self.x,
 			y: self.y,
 			mouseAngle: self.mouseAngle,
@@ -189,6 +191,7 @@ module.exports = function(param){
 	self.getUpdatePack = function(){
 		return {
 			id: self.id,
+			class: self.class,
 			x: self.x,
 			y: self.y,
 			mouseAngle: self.mouseAngle,

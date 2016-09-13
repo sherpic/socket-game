@@ -28,9 +28,11 @@ GLOBAL.playerList = {};
 
 Player.onConnect = function(socket){
 	var player = Player({
-		id: socket.id
+		id: socket.id,
+		class: socket.handshake.query.class
 	});
 	GLOBAL.playerList[player.id] = player;
+
 	initPack.player.push(player.getInitPack());
 
 	socket.on('keyPress', function(data){
@@ -120,7 +122,7 @@ Bullet.getAllInitPack = function(){
 	return bullets;
 }
 
-io.sockets.on('connection', function(socket){
+io.on('connection', function(socket){
 	socket.id = Math.random();
 	SOCKET_LIST[socket.id] = socket;
 
