@@ -25,8 +25,8 @@ module.exports = function(param){
 	self.shooting = false;
 	self.reloading = false;
 	self.hpMax = 10;
-	self.numberOfBullets = 8;
-	self.maxBullets = 8;
+	self.numberOfBullets = getMaxBullets(param.class);
+	self.maxBullets = self.numberOfBullets;
 	self.kills = 0;
 	self.deaths = 0;
 	self.collisionRadiusX = 55;
@@ -227,6 +227,29 @@ module.exports = function(param){
 			numberOfBullets:self.numberOfBullets,
 			reloading:self.reloading,
 		};
+	}
+
+	function getMaxBullets(playerClass){
+		switch(playerClass){
+			case 'pistol':
+				return 8;
+				break;
+			case 'smg':
+				return 32;
+				break;
+			case 'shotgun':
+				return 5;
+				break;
+			case 'assault':
+				return 30;
+				break;
+			case 'bolt-action-rifle':
+				return 6;
+				break;
+			case 'machine-gun':
+				return 100;
+				break;
+		}
 	}
 	return self;
 }
