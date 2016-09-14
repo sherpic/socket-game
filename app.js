@@ -14,6 +14,7 @@ process.env.DEBUG = false;
 process.env.GAME_WIDTH = 1000;
 process.env.GAME_HEIGHT = 1000;
 var FRICTION = 0.75;
+var BULLET_FADE_OUT_TICKS = 5;
 
 serv.listen(process.env.PORT);
 console.log("Server started.");
@@ -102,7 +103,7 @@ Bullet.update = function(){
 		var bullet = Bullet.list[i];
 		initPack.bullet.push(bullet.getInitPack());
 		if(bullet.toRemove){
-			if(bullet.deathTimer < 5){
+			if(bullet.deathTimer < BULLET_FADE_OUT_TICKS){
 				bullet.deathTimer++;
 			}
 			else{

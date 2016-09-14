@@ -22,20 +22,29 @@ module.exports = function(param){
 
 		for(var i in GLOBAL.playerList){
 			var player = GLOBAL.playerList[i];
-			if(self.collidingWith(player) && !self.toRemove && self.parent !== player.id){
-				self.toRemove = true;
-				player.hp -= self.damage;
-				player.beingHit = true;
-				if(player.hp <= 0){
-					var shooter = GLOBAL.playerList[self.parent];
-					if(shooter)
-						shooter.recordKill();
-					player.recordDeath();
-					player.respawn();
+			if(self.collidingWith(player) && self.parent !== player.id){
+				if(!self.toRemove){
+					registerHit(player, self.damage);
+				}
+				else if(self.toRemove && self.deathTimer > 0){
+					registerHit(player, self.damage - (self.deathTimer * 5));
 				}
 			}
 		}
 	}
+	function registerHit(player, damage){
+		self.toRemove = true;
+		player.hp -= damage;
+		player.beingHit = true;
+		if(player.hp <= 0){
+			var shooter = GLOBAL.playerList[self.parent];
+			if(shooter)
+				shooter.recordKill();
+			player.recordDeath();
+			player.respawn();
+		}
+	}
+
 	self.getInitPack = function(){
 		return {
 			id:self.id,
