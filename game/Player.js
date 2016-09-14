@@ -55,13 +55,26 @@ module.exports = function(param){
 		}
 	}
 	self.shootBullet = function(angle){
-		var b = Bullet({
-			parent: self.id, 
-			angle: angle,
-			x: self.x,
-			y: self.y,
-		});
-		Bullet.list[b.id] = b;
+		if(self.class == 'shotgun'){
+			for(i = 0; i < 8; i++){
+				var b = Bullet({
+					parent: self.id, 
+					angle: angle + Math.floor(Math.random()*(10-(-10+1))-10),
+					x: self.x,
+					y: self.y,
+				});
+				Bullet.list[b.id] = b;
+			}
+		}
+		else{
+			var b = Bullet({
+				parent: self.id, 
+				angle: angle + Math.floor(Math.random()*(3-(-3+1))-3),
+				x: self.x,
+				y: self.y,
+			});
+			Bullet.list[b.id] = b;
+		}
 	}
 
 	self.updateSpd = function(){
