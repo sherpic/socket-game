@@ -5,6 +5,7 @@ module.exports = function(param){
 	self.id = Math.random();
 	self.angle = param.angle;
 	self.diameter = 2;
+	self.damage = getDamage(param.class);
 	self.spdX = Math.cos(param.angle/180*Math.PI) * 40;
 	self.spdY = Math.sin(param.angle/180*Math.PI) * 40;
 	self.affectedByBoundaries = false;
@@ -23,7 +24,8 @@ module.exports = function(param){
 			var player = GLOBAL.playerList[i];
 			if(self.collidingWith(player) && self.parent !== player.id){
 				self.toRemove = true;
-				player.hp -= 1;
+				console.log("Did " + self.damage + " damage.");
+				player.hp -= self.damage;
 				player.beingHit = true;
 				if(player.hp <= 0){
 					var shooter = GLOBAL.playerList[self.parent];
@@ -52,6 +54,28 @@ module.exports = function(param){
 			deathTimer:self.deathTimer,
 			diameter:self.diameter,
 		};
+	}
+	function getDamage(playerClass){
+		switch(playerClass){
+			case 'pistol':
+				return 40;
+				break;
+			case 'smg':
+				return 40;
+				break;
+			case 'shotgun':
+				return 20;
+				break;
+			case 'assault':
+				return 50;
+				break;
+			case 'bolt-action-rifle':
+				return 90;
+				break;
+			case 'machine-gun':
+				return 40;
+				break;
+		}
 	}
 	return self;
 }

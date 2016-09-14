@@ -20,13 +20,13 @@ module.exports = function(param){
 	self.movementStatus = 'stopped';
 	self.affectedByBoundaries = true;
 	self.friction = 0.75;
-	self.hp = 10;
+	self.hpMax = 100;
+	self.hp = self.hpMax;
 	self.beingHit = false;
 	self.shooting = false;
 	self.betweenShotTime = getBetweenShotTime(param.class);
 	self.reloading = false;
 	self.reloadTime = getReloadTime(param.class);
-	self.hpMax = 10;
 	self.numberOfBullets = getMaxBullets(param.class);
 	self.maxBullets = self.numberOfBullets;
 	self.kills = 0;
@@ -70,7 +70,8 @@ module.exports = function(param){
 			var shotgunVariance = 10;
 			for(i = 0; i < 8; i++){
 				var b = Bullet({
-					parent: self.id, 
+					parent: self.id,
+					class: self.class, 
 					angle: angle + Math.floor(Math.random()*(shotgunVariance-(-shotgunVariance+1))-shotgunVariance) + inaccuracy,
 					x: self.x,
 					y: self.y,
@@ -81,6 +82,7 @@ module.exports = function(param){
 		else{
 			var b = Bullet({
 				parent: self.id, 
+				class: self.class, 
 				angle: angle + inaccuracy,
 				x: self.x,
 				y: self.y,
