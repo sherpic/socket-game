@@ -23,7 +23,9 @@ module.exports = function(param){
 	self.hp = 10;
 	self.beingHit = false;
 	self.shooting = false;
+	self.betweenShotTime = getBetweenShotTime(param.class);
 	self.reloading = false;
+	self.reloadTime = getReloadTime(param.class);
 	self.hpMax = 10;
 	self.numberOfBullets = getMaxBullets(param.class);
 	self.maxBullets = self.numberOfBullets;
@@ -43,14 +45,14 @@ module.exports = function(param){
 				self.numberOfBullets--;
 				setTimeout(function(){
 					self.shooting = false;
-				}, 160);
+				}, self.betweenShotTime);
 			}
 			else{
 				self.reloading = true;
 				setTimeout(function(){
 					self.numberOfBullets = self.maxBullets;
 					self.reloading = false;
-				}, 2000);
+				}, self.reloadTime);
 			}
 		}
 	}
@@ -248,6 +250,52 @@ module.exports = function(param){
 				break;
 			case 'machine-gun':
 				return 100;
+				break;
+		}
+	}
+
+	function getBetweenShotTime(playerClass){
+		switch(playerClass){
+			case 'pistol':
+				return 350;
+				break;
+			case 'smg':
+				return 100;
+				break;
+			case 'shotgun':
+				return 1000;
+				break;
+			case 'assault':
+				return 130;
+				break;
+			case 'bolt-action-rifle':
+				return 2000;
+				break;
+			case 'machine-gun':
+				return 100;
+				break;
+		}
+	}
+
+	function getReloadTime(playerClass){
+		switch(playerClass){
+			case 'pistol':
+				return 2000;
+				break;
+			case 'smg':
+				return 2000;
+				break;
+			case 'shotgun':
+				return 4200;
+				break;
+			case 'assault':
+				return 3200;
+				break;
+			case 'bolt-action-rifle':
+				return 3200;
+				break;
+			case 'machine-gun':
+				return 5000;
 				break;
 		}
 	}
