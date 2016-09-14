@@ -4,18 +4,35 @@
 	<canvas id="ctx" style="visibility: hidden"></canvas>
 
 	<div id="classSelectionScreen">
-		<h1 class="choose-class-heading">Choose your class</h1>
-		<div class="class-selector" onclick="setClass('assault')">
-			<img class="center" src="/img/assault.png">
-			<h2>Assault</h2>
+		<h1 class="choose-class-heading">Choose your weapon</h1>
+		<div class="row no-margins">
+			<div class="class-selector" onclick="setClass('pistol')">
+				<img class="center" src="/img/pistol.png">
+				<h2>Pistol</h2>
+			</div>
+			<div class="class-selector" onclick="setClass('smg')">
+				<img class="center" src="/img/smg.png">
+				<h2>SMG</h2>
+			</div>
+			<div class="class-selector" onclick="setClass('shotgun')">
+				<img class="center" src="/img/shotgun.png">
+				<h2>Shotgun</h2>
+			</div>
 		</div>
-		<div class="class-selector" onclick="setClass('shotgun')">
-			<img class="center" src="/img/shotgun.png">
-			<h2>Shotgun</h2>
+		<div class="row no-margins">
+			<div class="class-selector" onclick="setClass('assault')">
+				<img class="center" src="/img/assault.png">
+				<h2>Assault</h2>
+			</div>
+			<div class="class-selector" onclick="setClass('bolt-action-rifle')">
+				<img class="center" src="/img/bolt-action-rifle.png">
+				<h2>Bolt Action Rifle</h2>
+			</div>
+			<div class="class-selector" onclick="setClass('machine-gun')">
+				<img class="center" src="/img/machine-gun.png">
+				<h2>Machine Gun</h2>
+			</div>
 		</div>
-		<div class="class-selector" onclick="setClass('sniper')">
-			<img class="center" src="/img/sniper.png">
-			<h2>Sniper</h2>
 		</div>
 	</div>
 	<!-- <div id="chat-text" style="width:1000px; height:100px; overflow-y:scroll">

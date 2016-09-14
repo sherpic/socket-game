@@ -31,6 +31,7 @@ Player.onConnect = function(socket){
 		id: socket.id,
 		class: socket.handshake.query.class
 	});
+	console.log(socket.handshake.query.class);
 	GLOBAL.playerList[player.id] = player;
 
 	initPack.player.push(player.getInitPack());
