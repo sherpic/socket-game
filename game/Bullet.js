@@ -22,9 +22,8 @@ module.exports = function(param){
 
 		for(var i in GLOBAL.playerList){
 			var player = GLOBAL.playerList[i];
-			if(self.collidingWith(player) && self.parent !== player.id){
+			if(self.collidingWith(player) && !self.toRemove && self.parent !== player.id){
 				self.toRemove = true;
-				console.log("Did " + self.damage + " damage.");
 				player.hp -= self.damage;
 				player.beingHit = true;
 				if(player.hp <= 0){
