@@ -55,11 +55,21 @@ module.exports = function(param){
 		}
 	}
 	self.shootBullet = function(angle){
+		var variance;
+		if(self.movementStatus == 'moving'){
+			variance = 10;
+		}
+		else{
+			variance = 3;
+		}
+		var inaccuracy = Math.floor(Math.random()*(variance-(-variance+1))-variance);
+
 		if(self.class == 'shotgun'){
+			var shotgunVariance = 10;
 			for(i = 0; i < 8; i++){
 				var b = Bullet({
 					parent: self.id, 
-					angle: angle + Math.floor(Math.random()*(10-(-10+1))-10),
+					angle: angle + Math.floor(Math.random()*(shotgunVariance-(-shotgunVariance+1))-shotgunVariance) + inaccuracy,
 					x: self.x,
 					y: self.y,
 				});
@@ -69,7 +79,7 @@ module.exports = function(param){
 		else{
 			var b = Bullet({
 				parent: self.id, 
-				angle: angle + Math.floor(Math.random()*(3-(-3+1))-3),
+				angle: angle + inaccuracy,
 				x: self.x,
 				y: self.y,
 			});
