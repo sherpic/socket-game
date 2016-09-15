@@ -10,25 +10,24 @@ module.exports = function(param){
 	self.spdY = Math.sin(param.angle/180*Math.PI) * 40;
 	self.affectedByBoundaries = false;
 	self.parent = param.parent;
-
-	self.liveTimer = 0;
+	self.travelTime = getTravelTime(param.class);
+	self.timeAlive = 0;
 	self.deathTimer = 0;
 	self.toRemove = false;
+
 	var super_update = self.update;
+
 	self.update = function(){
-		if(self.liveTimer++ > 15)
+		//Remove bullets at end of life
+		if(!self.toRemove && self.timeAlive++ >= self.travelTime - 1){
 			self.toRemove = true;
+		}
 		super_update();
 
 		for(var i in GLOBAL.playerList){
 			var player = GLOBAL.playerList[i];
-			if(self.collidingWith(player) && self.parent !== player.id){
-				if(!self.toRemove){
-					registerHit(player, self.damage);
-				}
-				else if(self.toRemove && self.deathTimer > 0){
-					registerHit(player, self.damage - (self.deathTimer * 5));
-				}
+			if(self.collidingWith(player) && !self.toRemove && self.parent !== player.id){
+				registerHit(player, self.damage - self.timeAlive * 2);
 			}
 		}
 	}
@@ -82,6 +81,29 @@ module.exports = function(param){
 				break;
 			case 'machine-gun':
 				return 40;
+				break;
+		}
+	}
+	return self;
+	function getTravelTime(playerClass){
+		switch(playerClass){
+			case 'pistol':
+				return 12;
+				break;
+			case 'smg':
+				return 12;
+				break;
+			case 'shotgun':
+				return 10;
+				break;
+			case 'assault':
+				return 15;
+				break;
+			case 'bolt-action-rifle':
+				return 20;
+				break;
+			case 'machine-gun':
+				return 13;
 				break;
 		}
 	}

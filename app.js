@@ -14,7 +14,7 @@ process.env.DEBUG = false;
 process.env.GAME_WIDTH = 1000;
 process.env.GAME_HEIGHT = 1000;
 var FRICTION = 0.75;
-var BULLET_FADE_OUT_TICKS = 5;
+var BULLET_FADE_OUT_TICKS = 6;
 
 serv.listen(process.env.PORT);
 console.log("Server started.");
@@ -32,7 +32,7 @@ Player.onConnect = function(socket){
 		id: socket.id,
 		class: socket.handshake.query.class
 	});
-	console.log(socket.handshake.query.class);
+
 	GLOBAL.playerList[player.id] = player;
 
 	initPack.player.push(player.getInitPack());
@@ -102,14 +102,13 @@ Bullet.update = function(){
 	for(var i in Bullet.list){
 		var bullet = Bullet.list[i];
 		initPack.bullet.push(bullet.getInitPack());
+
 		if(bullet.toRemove){
-			if(bullet.deathTimer < BULLET_FADE_OUT_TICKS){
-				bullet.deathTimer++;
-			}
-			else{
-				delete Bullet.list[i];
-				removePack.bullet.push(bullet.id);
-			}
+			delete Bullet.list[i];
+			removePack.bullet.push(bullet.id);
+		}
+		else if(bullet.timeAlive > bullet.travelTime-BULLET_FADE_OUT_TICKS){
+			bullet.deathTimer++;
 		}
 		pack.push(bullet.getUpdatePack());
 		bullet.update();
