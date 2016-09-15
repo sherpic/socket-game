@@ -166,9 +166,8 @@
 							self.diameter = self.diameter * 1.3;
 						}, 40);
 						//Bullet fade out
-						ctx.fillStyle = 'rgba(72,72,72,' + (1 - self.deathTimer * 0.3) + ')';
-						ctx.strokeStyle = 'rgba(0,0,0,' + (1 - self.deathTimer * 0.3) + ')';
-						console.log("Expand");
+						ctx.fillStyle = 'rgba(72,72,72,' + (1 - self.deathTimer * 0.4) + ')';
+						ctx.strokeStyle = 'rgba(0,0,0,' + (1 - self.deathTimer * 0.4) + ')';
 					}
 					else{
 						ctx.fillStyle = '#484848';
